@@ -1080,7 +1080,7 @@ export default function DashboardPage() {
                         className="text-[#E73449] border-[#EDE7DC] hover:bg-[#FFF6E5] hover:border-[#E73449] font-medium"
                       >
                         <Edit2 className="w-3.5 h-3.5 mr-1" />
-                        Edit Capacity
+                        Edit
                       </Button>
                     </div>
                   );

@@ -69,6 +69,7 @@
 - **2026-09-25**: Fixed TypeScript syntax error `'from' expected` in [`user.tsx`](file:///c:/Project/Web/Ottodot%20Full-Stack%20Engineer%20Take-Home/client/components/layout/dashboard/user.tsx) by adding missing `from '@/components/ui/dropdown-menu';` clause to multiline `import { ... }` block.
 - **2026-09-25**: Fixed Next.js build error in [`user/[id]/page.tsx`](file:///c:/Project/Web/Ottodot%20Full-Stack%20Engineer%20Take-Home/client/app/user/%5Bid%5D/page.tsx) where `'use client'` directive conflicted with `generateStaticParams()`. Converted to Server Component using `redirect('/dashboard')` from `next/navigation`.
 - **2026-09-25**: Resolved PostgreSQL `pg_hba.conf` connection rejection on Linux server by changing `POSTGRES_DSN` host in [`server-go/.env`](file:///c:/Project/Web/Ottodot%20Full-Stack%20Engineer%20Take-Home/server-go/.env) from public IP (`103.161.185.98`) to local loopback (`127.0.0.1`).
+- **2026-09-25**: Resolved CORS `405 Method Not Allowed` error on preflight `OPTIONS` requests for production API (`https://serverottodot.byteseeker.net/api/v1/auth/login`) by updating Nginx configuration in [`server-go/nginx.md`](file:///c:/Project/Web/Ottodot%20Full-Stack%20Engineer%20Take-Home/server-go/nginx.md) with explicit `OPTIONS` preflight response headers (HTTP 204).
 
 
 

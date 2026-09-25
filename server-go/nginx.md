@@ -57,6 +57,18 @@ server {
     # UTAMA: Proxy Pass ke Upstream Go Backend (Zero Downtime)
     # ========================================================
     location / {
+        # Handle CORS Preflight (OPTIONS) directly in Nginx to prevent 405 Method Not Allowed
+        if ($request_method = 'OPTIONS') {
+            add_header 'Access-Control-Allow-Origin' '$http_origin' always;
+            add_header 'Access-Control-Allow-Credentials' 'true' always;
+            add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS, HEAD, PATCH' always;
+            add_header 'Access-Control-Allow-Headers' 'Origin, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, Accept, Cache-Control, X-Requested-With, x-refresh-request, x-skip-refresh, Token, session, X-Refresh-Request, X-Skip-Refresh' always;
+            add_header 'Access-Control-Max-Age' 86400 always;
+            add_header 'Content-Type' 'text/plain; charset=utf-8';
+            add_header 'Content-Length' 0;
+            return 204;
+        }
+
         proxy_pass http://ottodot_backend;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -68,7 +80,7 @@ server {
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection "upgrade";
 
-        # Ensure OPTIONS method is passed to Go for CORS handling
+        # Ensure headers and proxy settings are forwarded
         proxy_pass_request_headers on;
         proxy_connect_timeout 5s;
         proxy_read_timeout 60s;
