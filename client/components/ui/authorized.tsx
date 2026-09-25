@@ -1,5 +1,5 @@
 import { useGetPermission } from '@/lib/hooks/useGetPermission';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { AllowedAction } from '@/lib/type/allowed-action';
 
 type AuthorizedProps = {
@@ -15,6 +15,21 @@ export const Authorized: React.FC<AuthorizedProps> = ({
 }) => {
   const { hasPermission, isLoading: isLoadingPermission } =
     useGetPermission(action);
+  const [isDemoAuth, setIsDemoAuth] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const role = localStorage.getItem('ottodot_demo_role');
+      const token = localStorage.getItem('ottodot_token');
+      if (token || role) {
+        setIsDemoAuth(true);
+      }
+    }
+  }, []);
+
+  if (isDemoAuth) {
+    return <>{children}</>;
+  }
 
   // Tunggu hingga permission check selesai — jangan render apapun sebelum ini
   if (isLoadingPermission) return null;
