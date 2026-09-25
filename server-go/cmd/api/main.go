@@ -42,11 +42,6 @@ func main() {
 	}
 	defer config.DisconnectPostgres()
 
-	// Connect to MongoDB HRIS
-	if err := config.InitMongoDB(); err != nil {
-		logger.Log.Error("Failed to connect to MongoDB HRIS", zap.Error(err))
-	}
-
 
 	// Set Gin mode
 	gin.SetMode(config.AppConfig.GinMode)

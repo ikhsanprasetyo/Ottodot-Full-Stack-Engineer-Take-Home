@@ -50,12 +50,12 @@ func Load() error {
 	// Load .env file if exists
 	_ = godotenv.Load()
 
-	port := getEnv("PORT", "5570")
+	port := getEnv("PORT", "9050")
 
-	// Forced override for standby instance (rtu-server-linux-2) regardless of .env PORT=5570
+	// Forced override for standby instance regardless of .env PORT=9050
 	execPath := os.Args[0]
 	if strings.HasSuffix(execPath, "2") || strings.HasSuffix(execPath, "-2") || strings.Contains(execPath, "linux-2") {
-		port = "5571"
+		port = "9051"
 	}
 
 	if customPort := os.Getenv("PORT_OVERRIDE"); customPort != "" {
