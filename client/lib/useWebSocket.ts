@@ -1,14 +1,21 @@
 import { useEffect, useRef } from 'react';
 
-const WS_URL =
-  process.env.NEXT_PUBLIC_WS_URL || 'wss://serverottodot.byteseeker.net/ws';
+const getWsUrl = () => {
+  if (process.env.NEXT_PUBLIC_WS_URL) return process.env.NEXT_PUBLIC_WS_URL;
+  if (
+    typeof window !== 'undefined' &&
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+  ) {
+    return 'ws://localhost:9050/ws';
+  }
+  return 'wss://serverottodot.byteseeker.net/ws';
+};
 
 export function useWebSocket(onMessage: (data: any) => void) {
   const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
-    // Replace http(s) with ws(s) if needed
-    let socketUrl = WS_URL;
+    let socketUrl = getWsUrl();
     if (typeof window !== 'undefined' && socketUrl.startsWith('http')) {
       socketUrl = socketUrl.replace(/^http/, 'ws');
     }
@@ -31,10 +38,7 @@ export function useWebSocket(onMessage: (data: any) => void) {
       };
 
       return () => {
-        if (
-          ws.readyState === WebSocket.OPEN ||
-          ws.readyState === WebSocket.CONNECTING
-        ) {
+        if (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING) {
           ws.close();
         }
       };

@@ -1,14 +1,22 @@
 import axios from 'axios';
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL ||
-  'https://serverottodot.byteseeker.net/api/v1';
+const getApiBaseUrl = () => {
+  if (process.env.NEXT_PUBLIC_API_URL) return process.env.NEXT_PUBLIC_API_URL;
+  if (process.env.NEXT_PUBLIC_API) return `${process.env.NEXT_PUBLIC_API}/v1`;
+  if (
+    typeof window !== 'undefined' &&
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+  ) {
+    return 'http://localhost:9050/api/v1';
+  }
+  return 'https://serverottodot.byteseeker.net/api/v1';
+};
 
 export const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: getApiBaseUrl(),
   headers: {
-    'Content-Type': 'application/json'
-  }
+    'Content-Type': 'application/json',
+  },
 });
 
 // Interceptor to inject JWT token
@@ -52,12 +60,7 @@ export interface Booking {
   id: string;
   student_id: string;
   trial_class_id: string;
-  status:
-    | 'pending_payment'
-    | 'confirmed'
-    | 'payment_failed'
-    | 'cancelled'
-    | 'expired';
+  status: 'pending_payment' | 'confirmed' | 'payment_failed' | 'cancelled' | 'expired';
   payment_token: string;
   created_at: string;
   student?: Student;
@@ -98,12 +101,7 @@ export const ottodotApi = {
 
   updateClassCapacity: async (
     id: string,
-    payload: {
-      title: string;
-      subject: string;
-      start_time: string;
-      capacity: number;
-    }
+    payload: { title: string; subject: string; start_time: string; capacity: number }
   ) => {
     const res = await api.put(`/admin/classes/${id}`, payload);
     return res.data;
@@ -113,7 +111,7 @@ export const ottodotApi = {
   createBooking: async (studentId: string, trialClassId: string) => {
     const res = await api.post('/bookings', {
       student_id: studentId,
-      trial_class_id: trialClassId
+      trial_class_id: trialClassId,
     });
     return res.data;
   },
@@ -128,7 +126,7 @@ export const ottodotApi = {
       const res = await api.post('/payments/process', {
         booking_id: bookingId,
         payment_token: paymentToken,
-        simulate_outcome: simulateOutcome
+        simulate_outcome: simulateOutcome,
       });
       return { success: true, data: res.data };
     } catch (err: any) {
@@ -153,5 +151,5 @@ export const ottodotApi = {
   getParentsAndStudents: async () => {
     const res = await api.get('/parents');
     return res.data.data as Parent[];
-  }
+  },
 };
