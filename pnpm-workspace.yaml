@@ -1,0 +1,10 @@
+packages:
+  - client
+  - server
+  - server-go
+  - docs
+allowBuilds:
+  core-js: true
+  core-js-pure: true
+  sharp: true
+  unrs-resolver: true

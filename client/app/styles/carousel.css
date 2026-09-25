@@ -1,0 +1,22 @@
+/* Sembunyikan arrow di mobile */
+.carousel .control-arrow {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Tampilkan arrow hanya di desktop */
+@media (min-width: 768px) {
+  .carousel .control-arrow {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  .carousel .control-prev,
+  .carousel .control-next {
+    color: white !important;
+    background-color: rgba(0, 0, 0, 0.4) !important;
+    padding: 8px !important;
+    border-radius: 9999px !important;
+    font-size: 24px !important;
+  }
+}

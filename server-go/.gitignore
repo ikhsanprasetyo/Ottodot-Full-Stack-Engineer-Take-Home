@@ -1,0 +1,43 @@
+# Binaries
+server-go
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test binary
+*.test
+
+# Output
+*.out
+/tmp/
+
+# Dependency directories
+vendor/
+
+# Go workspace file
+go.work
+
+# Environment
+# .env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# SSH Keys & Credentials
+.ssh/
+*.id_ed25519
+*.id_rsa
+
