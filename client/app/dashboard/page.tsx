@@ -598,6 +598,7 @@ export default function DashboardPage() {
               isConnected={isConnected}
               connectedText="Realtime Connected"
               size="sm"
+              className="hidden sm:inline-flex"
             />
           </div>
 
