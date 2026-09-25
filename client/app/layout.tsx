@@ -5,13 +5,13 @@ import Analytics from './analytics';
 import { Suspense } from 'react';
 
 export const metadata = {
-  title: 'RTU Sinar Utama',
-  description: 'Production & Distribution Management – Sinar Utama',
-  keywords: 'RTU Sinar Utama, Produksi Sinar Utama, Mie Ayam',
+  title: 'Primary Math & Science Tuition Singapore | Ottodot',
+  description: 'Primary Math and Science tuition blended with interactive Roblox gameplay — for deeper, more memorable learning that sticks.',
+  keywords: 'Ottodot, Math Tuition Singapore, Science Tuition Singapore, Roblox Learning, Primary School Tuition',
   authors: [
     {
-      name: 'Sinar Utama Mie Ayam',
-      url: process.env.NEXT_PUBLIC_CLIENT_URL
+      name: 'Ottodot Education',
+      url: process.env.NEXT_PUBLIC_CLIENT_URL || 'https://www.ottodot.com'
     }
   ],
   robots: {
@@ -21,32 +21,22 @@ export const metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.ico' },
-      { url: '/logo-full-color.png', type: 'image/png' }
+      { url: '/favicon.ico' }
     ]
   },
   openGraph: {
-    title: 'RTU Sinar Utama',
-    description: 'Production & Distribution Management – Sinar Utama',
-    url: process.env.NEXT_PUBLIC_CLIENT_URL,
-    siteName: 'RTU Sinar Utama',
-    images: [
-      {
-        url: `${process.env.NEXT_PUBLIC_CLIENT_URL}/images/cover.jpg`,
-        width: 1200,
-        height: 630,
-        alt: 'RTU Sinar Utama cover'
-      }
-    ],
+    title: 'Primary Math & Science Tuition Singapore | Ottodot',
+    description: 'Primary Math and Science tuition blended with interactive Roblox gameplay — for deeper, more memorable learning that sticks.',
+    url: process.env.NEXT_PUBLIC_CLIENT_URL || 'https://www.ottodot.com',
+    siteName: 'Ottodot',
     type: 'website'
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'RTU Sinar Utama',
-    description: 'Production & Distribution Management – Sinar Utama',
-    images: [`${process.env.NEXT_PUBLIC_CLIENT_URL}/images/cover.jpg`]
+    title: 'Primary Math & Science Tuition Singapore | Ottodot',
+    description: 'Primary Math and Science tuition blended with interactive Roblox gameplay — for deeper, more memorable learning that sticks.'
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_CLIENT_URL || '')
+  metadataBase: new URL(process.env.NEXT_PUBLIC_CLIENT_URL || 'https://www.ottodot.com')
 };
 
 export const viewport = {

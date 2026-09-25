@@ -1,39 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..900;1,9..144,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
+    --coral: #E73449;
+    --coral-deep: #C72236;
+    --mustard: #FBAE24;
+    --mustard-deep: #E69612;
+    --mint: #83C341;
+    --mint-deep: #6BA62F;
+    --sky: #6ACCE1;
+    --sky-deep: #4FB5CD;
+    --ink: #15172B;
+    --ink-2: #3F4159;
+    --muted: #555770;
+    --line: #EDE7DC;
+    --cream: #FFF6E5;
+    --paper: #FFFFFF;
+    --white: #FFFFFF;
+    --shadow-sm: 0 1px 0 rgba(21,23,43,.04), 0 4px 14px -6px rgba(21,23,43,.08);
+    --shadow: 0 2px 0 rgba(21,23,43,.05), 0 24px 50px -22px rgba(21,23,43,.18);
+    --shadow-lg: 0 30px 80px -30px rgba(21,23,43,.28);
+    --radius: 18px;
+    --radius-lg: 28px;
+
     --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --foreground: 220 33% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 220 33% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 220 33% 12%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 353 79% 55%; /* #E73449 */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 40 100% 95%; /* #FFF6E5 */
+    --secondary-foreground: 235 34% 12%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 240 14% 39%;
+    --muted-foreground: 235 14% 39%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 191 66% 65%; /* #6ACCE1 */
+    --accent-foreground: 235 34% 12%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 353 79% 55%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 37 32% 90%; /* #EDE7DC */
+    --input: 37 32% 90%;
+    --ring: 353 79% 55%;
 
-    --radius: 0.5rem;
+    --radius: 0.125rem; /* rounded-sm */
   }
+}
+
+.font-serif, .serif {
+  font-family: 'Fraunces', Georgia, serif;
+}
+
+.font-sans {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+}
 
   .dark {
     --background: 222.2 84% 4.9%;

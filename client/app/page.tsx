@@ -36,7 +36,6 @@ export default function LoginPage() {
   const quickLogin = (quickEmail: string, role: string, name: string) => {
     setEmail(quickEmail);
     setPassword('password123');
-    // Save transient demo state
     localStorage.setItem('ottodot_demo_role', role);
     localStorage.setItem('ottodot_demo_name', name);
     setTimeout(() => {
@@ -45,34 +44,50 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8 selection:bg-indigo-500 selection:text-white">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-        <div className="inline-flex items-center justify-center p-3 bg-indigo-600/20 border border-indigo-500/30 rounded-sm mb-4">
-          <BookOpen className="w-8 h-8 text-indigo-400" />
+    <div
+      className="min-h-screen flex flex-col justify-center py-12 sm:px-6 lg:px-8 font-sans text-[#15172B] relative overflow-hidden"
+      style={{
+        background:
+          'linear-gradient(135deg, rgba(255,246,229,.88), rgba(255,255,255,.92) 48%, rgba(221,241,246,.72)), #ffffff'
+      }}
+    >
+      {/* Background ambient light blobs matching Ottodot homepage */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-[#6ACCE1]/15 blur-3xl" />
+        <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-[#FBAE24]/15 blur-3xl" />
+      </div>
+
+      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center relative z-10">
+        <div className="inline-flex items-center gap-2 bg-white border border-[#EDE7DC] px-4 py-2 rounded-sm shadow-sm mb-4">
+          <span className="bg-[#E73449] text-white px-2 py-0.5 rounded-sm text-xs font-bold uppercase tracking-wide">
+            Trial Booking Engine
+          </span>
+          <span className="text-xs font-semibold text-[#3F4159]">Ottodot Tuition Singapore</span>
         </div>
-        <h2 className="text-3xl font-extrabold tracking-tight text-white">
-          Ottodot Learning
-        </h2>
-        <p className="mt-2 text-sm text-slate-400">
-          Trial Booking Reliability & Live Class Platform
+
+        <h1 className="font-serif text-3xl sm:text-4xl font-extrabold text-[#15172B] tracking-tight">
+          Ottodot <span className="italic text-[#E73449]">Tuition</span> Platform
+        </h1>
+        <p className="mt-2 text-sm text-[#3F4159]">
+          Primary Math &amp; Science Tuition blended with Roblox gameplay
         </p>
       </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-slate-900 border border-slate-800 py-8 px-6 shadow-2xl rounded-sm sm:px-10">
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md relative z-10">
+        <div className="bg-white border border-[#EDE7DC] py-8 px-6 shadow-xl rounded-sm sm:px-10">
           <form className="space-y-5" onSubmit={handleLogin}>
             {error && (
-              <div className="bg-rose-950/80 border border-rose-600/50 text-rose-200 text-xs p-3 rounded-sm">
+              <div className="bg-[#FFF6E5] border border-[#E73449]/40 text-[#C72236] text-xs p-3 rounded-sm font-medium">
                 {error}
               </div>
             )}
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
-                Email Address
+              <label className="block text-xs font-bold uppercase tracking-wider text-[#15172B] mb-1">
+                Parent / User Email
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#555770]">
                   <User className="w-4 h-4" />
                 </div>
                 <input
@@ -80,18 +95,18 @@ export default function LoginPage() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full pl-10 pr-3 py-2.5 bg-slate-950 border border-slate-800 rounded-sm text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
-                  placeholder="name@example.com"
+                  className="block w-full pl-10 pr-3 py-2.5 bg-white border border-[#EDE7DC] rounded-sm text-sm text-[#15172B] placeholder-[#555770] focus:outline-none focus:border-[#E73449] focus:ring-1 focus:ring-[#E73449] transition-colors"
+                  placeholder="parent@example.com"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
+              <label className="block text-xs font-bold uppercase tracking-wider text-[#15172B] mb-1">
                 Password
               </label>
               <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#555770]">
                   <Lock className="w-4 h-4" />
                 </div>
                 <input
@@ -99,7 +114,7 @@ export default function LoginPage() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-10 pr-3 py-2.5 bg-slate-950 border border-slate-800 rounded-sm text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                  className="block w-full pl-10 pr-3 py-2.5 bg-white border border-[#EDE7DC] rounded-sm text-sm text-[#15172B] placeholder-[#555770] focus:outline-none focus:border-[#E73449] focus:ring-1 focus:ring-[#E73449] transition-colors"
                   placeholder="••••••••"
                 />
               </div>
@@ -108,67 +123,67 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full flex justify-center items-center gap-2 py-2.5 px-4 border border-transparent rounded-sm text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer disabled:opacity-50 transition-all shadow-lg shadow-indigo-600/20"
+              className="w-full flex justify-center items-center gap-2 py-3 px-4 rounded-sm text-sm font-bold text-white bg-[#E73449] hover:bg-[#C72236] focus:outline-none cursor-pointer disabled:opacity-50 transition-all shadow-[0_6px_0_-2px_rgba(231,52,73,0.35)]"
             >
               {loading ? (
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
               ) : (
                 <>
                   <LogIn className="w-4 h-4" />
-                  Sign In to Dashboard
+                  Sign In to Portal
                 </>
               )}
             </button>
           </form>
 
-          {/* Quick Demo Login Selector */}
-          <div className="mt-8 border-t border-slate-800 pt-6">
-            <div className="flex items-center gap-1.5 mb-3 text-xs font-semibold uppercase tracking-wider text-indigo-400">
-              <Sparkles className="w-3.5 h-3.5" />
-              Quick Demo Accounts
+          {/* Quick Demo Accounts Selection */}
+          <div className="mt-8 border-t border-[#EDE7DC] pt-6">
+            <div className="flex items-center gap-1.5 mb-3 text-xs font-bold uppercase tracking-wider text-[#E73449]">
+              <Sparkles className="w-4 h-4 text-[#FBAE24]" />
+              Quick Demo Login Options
             </div>
             <div className="space-y-2">
               <button
                 type="button"
                 onClick={() => quickLogin('parent1@byteseeker.net', 'parent', 'Ikhsan Parent')}
-                className="w-full flex items-center justify-between p-2.5 bg-slate-950 hover:bg-slate-800/60 border border-slate-800/80 rounded-sm text-left transition-colors cursor-pointer group"
+                className="w-full flex items-center justify-between p-3 bg-[#FFF6E5] hover:bg-[#FFECC9] border border-[#EDE7DC] rounded-sm text-left transition-colors cursor-pointer group"
               >
                 <div>
-                  <div className="text-xs font-semibold text-slate-200 group-hover:text-indigo-400">
+                  <div className="text-xs font-bold text-[#15172B] group-hover:text-[#E73449]">
                     Parent 1: Ikhsan Parent
                   </div>
-                  <div className="text-[11px] text-slate-500">2 Children: Leo (8y), Maya (10y)</div>
+                  <div className="text-[11px] text-[#555770]">2 Children: Leo (8y), Maya (10y)</div>
                 </div>
-                <CheckCircle2 className="w-4 h-4 text-slate-600 group-hover:text-indigo-400" />
+                <CheckCircle2 className="w-4 h-4 text-[#83C341] group-hover:text-[#E73449]" />
               </button>
 
               <button
                 type="button"
                 onClick={() => quickLogin('parent2@byteseeker.net', 'parent', 'Sarah Jenkins')}
-                className="w-full flex items-center justify-between p-2.5 bg-slate-950 hover:bg-slate-800/60 border border-slate-800/80 rounded-sm text-left transition-colors cursor-pointer group"
+                className="w-full flex items-center justify-between p-3 bg-[#FFF6E5] hover:bg-[#FFECC9] border border-[#EDE7DC] rounded-sm text-left transition-colors cursor-pointer group"
               >
                 <div>
-                  <div className="text-xs font-semibold text-slate-200 group-hover:text-indigo-400">
+                  <div className="text-xs font-bold text-[#15172B] group-hover:text-[#E73449]">
                     Parent 2: Sarah Jenkins
                   </div>
-                  <div className="text-[11px] text-slate-500">1 Child: Ethan (7y)</div>
+                  <div className="text-[11px] text-[#555770]">1 Child: Ethan (7y)</div>
                 </div>
-                <CheckCircle2 className="w-4 h-4 text-slate-600 group-hover:text-indigo-400" />
+                <CheckCircle2 className="w-4 h-4 text-[#83C341] group-hover:text-[#E73449]" />
               </button>
 
               <button
                 type="button"
                 onClick={() => quickLogin('admin@ottodot.net', 'admin', 'Ottodot Teacher Admin')}
-                className="w-full flex items-center justify-between p-2.5 bg-indigo-950/40 hover:bg-indigo-900/40 border border-indigo-800/50 rounded-sm text-left transition-colors cursor-pointer group"
+                className="w-full flex items-center justify-between p-3 bg-white hover:bg-[#FFF6E5] border border-[#EDE7DC] rounded-sm text-left transition-colors cursor-pointer group"
               >
                 <div>
-                  <div className="text-xs font-semibold text-indigo-300 group-hover:text-indigo-200 flex items-center gap-1.5">
-                    <Shield className="w-3.5 h-3.5 text-indigo-400" />
-                    Teacher / Admin Account
+                  <div className="text-xs font-bold text-[#15172B] group-hover:text-[#E73449] flex items-center gap-1.5">
+                    <Shield className="w-3.5 h-3.5 text-[#E73449]" />
+                    Teacher / Admin Mode
                   </div>
-                  <div className="text-[11px] text-indigo-400/80">View Rosters & Edit Class Limits</div>
+                  <div className="text-[11px] text-[#555770]">View Live Roster &amp; Dynamic Seat Limits</div>
                 </div>
-                <CheckCircle2 className="w-4 h-4 text-indigo-500" />
+                <CheckCircle2 className="w-4 h-4 text-[#6ACCE1]" />
               </button>
             </div>
           </div>

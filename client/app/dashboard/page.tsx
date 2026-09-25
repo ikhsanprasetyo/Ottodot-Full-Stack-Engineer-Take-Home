@@ -281,38 +281,38 @@ export default function DashboardPage() {
   );
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-indigo-500 selection:text-white">
-      {/* Header Bar */}
-      <header className="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-30">
+    <div className="min-h-screen bg-[#FFFFFF] text-[#15172B] font-sans">
+      {/* Sticky Header Bar matching www.ottodot.com */}
+      <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-[#EDE7DC]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-indigo-600/20 border border-indigo-500/30 rounded-sm">
-              <BookOpen className="w-5 h-5 text-indigo-400" />
+            <div className="p-2 bg-[#FFF6E5] border border-[#EDE7DC] rounded-sm text-[#E73449]">
+              <BookOpen className="w-5 h-5" />
             </div>
             <div>
-              <span className="font-extrabold tracking-tight text-white text-base">Ottodot</span>
-              <span className="text-xs text-indigo-400 font-semibold ml-2 px-2 py-0.5 bg-indigo-950 border border-indigo-800/60 rounded-sm">
-                Trial Reliability Engine
+              <span className="font-serif font-bold text-[#15172B] text-xl tracking-tight">Ottodot</span>
+              <span className="text-xs text-[#E73449] font-bold ml-2 px-2 py-0.5 bg-[#FFF6E5] border border-[#EDE7DC] rounded-sm uppercase tracking-wider">
+                Tuition Portal
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             {/* Active Parent Switcher */}
-            <div className="flex items-center gap-2 bg-slate-950 border border-slate-800 px-3 py-1.5 rounded-sm">
-              <UserCheck className="w-4 h-4 text-indigo-400" />
+            <div className="flex items-center gap-2 bg-[#FFF6E5] border border-[#EDE7DC] px-3 py-1.5 rounded-sm">
+              <UserCheck className="w-4 h-4 text-[#E73449]" />
               <div className="text-xs">
-                <span className="text-slate-400">Parent: </span>
+                <span className="text-[#555770] font-medium">Parent: </span>
                 <select
                   value={selectedParent?.id || ''}
                   onChange={(e) => {
                     const p = parents.find((item) => item.id === e.target.value);
                     if (p) handleParentSelect(p);
                   }}
-                  className="bg-transparent font-semibold text-indigo-300 focus:outline-none cursor-pointer"
+                  className="bg-transparent font-bold text-[#15172B] focus:outline-none cursor-pointer"
                 >
                   {parents.map((p) => (
-                    <option key={p.id} value={p.id} className="bg-slate-900 text-slate-100">
+                    <option key={p.id} value={p.id} className="bg-white text-[#15172B]">
                       {p.name} ({p.students.length} kids)
                     </option>
                   ))}
@@ -327,22 +327,30 @@ export default function DashboardPage() {
                 setUserRole(nextRole);
                 localStorage.setItem('ottodot_demo_role', nextRole);
               }}
-              className={`text-xs px-3 py-1.5 rounded-sm border font-semibold flex items-center gap-1.5 cursor-pointer transition-colors ${
+              className={`text-xs px-3 py-1.5 rounded-sm border font-bold flex items-center gap-1.5 cursor-pointer transition-colors ${
                 userRole === 'admin'
-                  ? 'bg-indigo-900/40 border-indigo-700 text-indigo-200'
-                  : 'bg-slate-900 border-slate-800 text-slate-300 hover:text-white'
+                  ? 'bg-[#E73449] border-[#C72236] text-white'
+                  : 'bg-white border-[#EDE7DC] text-[#15172B] hover:bg-[#FFF6E5]'
               }`}
             >
               <Shield className="w-3.5 h-3.5" />
               Role: {userRole === 'admin' ? 'Teacher Admin' : 'Parent View'}
             </button>
 
+            {/* User Profile Avatar (rounded-full allowed per rule #26) */}
+            <div
+              className="w-8 h-8 rounded-full bg-[#E73449] text-white flex items-center justify-center font-bold text-xs shadow-sm"
+              title={selectedParent?.name || 'User Profile'}
+            >
+              {selectedParent?.name ? selectedParent.name.charAt(0) : 'U'}
+            </div>
+
             <button
               onClick={() => {
                 localStorage.removeItem('ottodot_token');
                 router.push('/');
               }}
-              className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-sm transition-colors cursor-pointer"
+              className="p-2 text-[#555770] hover:text-[#E73449] hover:bg-[#FFF6E5] rounded-sm transition-colors cursor-pointer"
               title="Sign Out"
             >
               <LogOut className="w-4 h-4" />
@@ -353,36 +361,37 @@ export default function DashboardPage() {
 
       {/* Main Container */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Child Selector Banner */}
+        {/* Active Child Selection Banner */}
         {selectedParent && (
-          <div className="mb-8 p-4 bg-slate-900/90 border border-slate-800 rounded-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
+          <div className="mb-8 p-4 bg-[#FFF6E5] border border-[#EDE7DC] rounded-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-indigo-600/20 border border-indigo-500/30 rounded-sm flex items-center justify-center text-indigo-400 font-bold text-base">
+              {/* Profile icon in parent card uses rounded-full per rule #26 */}
+              <div className="w-10 h-10 bg-[#E73449] text-white rounded-full flex items-center justify-center font-bold text-base shadow-sm">
                 <User className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
+                <h3 className="text-sm font-bold text-[#15172B] flex items-center gap-2">
                   {selectedParent.name}
-                  <span className="text-xs font-normal text-slate-400">({selectedParent.email})</span>
+                  <span className="text-xs font-normal text-[#555770]">({selectedParent.email})</span>
                 </h3>
-                <p className="text-xs text-slate-400">
+                <p className="text-xs text-[#3F4159]">
                   Select active child for booking trial class:
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               {selectedParent.students.map((student) => (
                 <button
                   key={student.id}
                   onClick={() => setSelectedStudent(student)}
-                  className={`px-3 py-1.5 text-xs font-semibold rounded-sm border transition-colors cursor-pointer flex items-center gap-1.5 ${
+                  className={`px-3.5 py-1.5 text-xs font-bold rounded-sm border transition-all cursor-pointer flex items-center gap-1.5 ${
                     selectedStudent?.id === student.id
-                      ? 'bg-indigo-600 border-indigo-500 text-white shadow-md shadow-indigo-600/20'
-                      : 'bg-slate-950 border-slate-800 text-slate-300 hover:bg-slate-800'
+                      ? 'bg-[#E73449] border-[#C72236] text-white shadow-[0_4px_0_-1px_rgba(231,52,73,0.3)]'
+                      : 'bg-white border-[#EDE7DC] text-[#15172B] hover:bg-[#FFF6E5]'
                   }`}
                 >
-                  <User className="w-3.5 h-3.5 text-indigo-300" />
+                  <User className="w-3.5 h-3.5 opacity-80" />
                   {student.name} ({student.age} y.o)
                 </button>
               ))}
@@ -390,15 +399,15 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Tab Header Navigation */}
-        <div className="border-b border-slate-800 mb-8">
+        {/* Navigation Tabs */}
+        <div className="border-b border-[#EDE7DC] mb-8">
           <nav className="flex space-x-8 overflow-x-auto">
             <button
               onClick={() => setActiveTab('classes')}
-              className={`pb-4 px-1 text-sm font-semibold border-b-2 flex items-center gap-2 cursor-pointer transition-colors whitespace-nowrap ${
+              className={`pb-4 px-1 text-sm font-bold border-b-2 flex items-center gap-2 cursor-pointer transition-colors whitespace-nowrap ${
                 activeTab === 'classes'
-                  ? 'border-indigo-500 text-indigo-400'
-                  : 'border-transparent text-slate-400 hover:text-slate-200'
+                  ? 'border-[#E73449] text-[#E73449]'
+                  : 'border-transparent text-[#555770] hover:text-[#15172B]'
               }`}
             >
               <BookOpen className="w-4 h-4" />
@@ -407,25 +416,25 @@ export default function DashboardPage() {
 
             <button
               onClick={() => setActiveTab('payment')}
-              className={`pb-4 px-1 text-sm font-semibold border-b-2 flex items-center gap-2 cursor-pointer transition-colors whitespace-nowrap relative ${
+              className={`pb-4 px-1 text-sm font-bold border-b-2 flex items-center gap-2 cursor-pointer transition-colors whitespace-nowrap relative ${
                 activeTab === 'payment'
-                  ? 'border-indigo-500 text-indigo-400'
-                  : 'border-transparent text-slate-400 hover:text-slate-200'
+                  ? 'border-[#E73449] text-[#E73449]'
+                  : 'border-transparent text-[#555770] hover:text-[#15172B]'
               }`}
             >
               <CreditCard className="w-4 h-4" />
               Mock Payment & Race Test
               {activeBooking && activeBooking.status === 'pending_payment' && (
-                <span className="w-2 h-2 rounded-full bg-amber-500 animate-ping absolute top-0 right-0" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[#FBAE24] animate-ping absolute top-0 right-0" />
               )}
             </button>
 
             <button
               onClick={() => setActiveTab('bookings')}
-              className={`pb-4 px-1 text-sm font-semibold border-b-2 flex items-center gap-2 cursor-pointer transition-colors whitespace-nowrap ${
+              className={`pb-4 px-1 text-sm font-bold border-b-2 flex items-center gap-2 cursor-pointer transition-colors whitespace-nowrap ${
                 activeTab === 'bookings'
-                  ? 'border-indigo-500 text-indigo-400'
-                  : 'border-transparent text-slate-400 hover:text-slate-200'
+                  ? 'border-[#E73449] text-[#E73449]'
+                  : 'border-transparent text-[#555770] hover:text-[#15172B]'
               }`}
             >
               <Clock className="w-4 h-4" />
@@ -435,13 +444,13 @@ export default function DashboardPage() {
             {userRole === 'admin' && (
               <button
                 onClick={() => setActiveTab('admin')}
-                className={`pb-4 px-1 text-sm font-semibold border-b-2 flex items-center gap-2 cursor-pointer transition-colors whitespace-nowrap ${
+                className={`pb-4 px-1 text-sm font-bold border-b-2 flex items-center gap-2 cursor-pointer transition-colors whitespace-nowrap ${
                   activeTab === 'admin'
-                    ? 'border-indigo-500 text-indigo-400'
-                    : 'border-transparent text-slate-400 hover:text-slate-200'
+                    ? 'border-[#E73449] text-[#E73449]'
+                    : 'border-transparent text-[#555770] hover:text-[#15172B]'
                 }`}
               >
-                <Users className="w-4 h-4 text-indigo-400" />
+                <Users className="w-4 h-4 text-[#E73449]" />
                 Teacher Roster & Dynamic Capacity
               </button>
             )}
@@ -453,21 +462,21 @@ export default function DashboardPage() {
           <div>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
               <div>
-                <h2 className="text-xl font-bold text-white tracking-tight">Available Trial Classes</h2>
-                <p className="text-xs text-slate-400">Live seat counts update automatically in real-time via WebSocket</p>
+                <h2 className="font-serif text-2xl font-bold text-[#15172B] tracking-tight">Available Trial Classes</h2>
+                <p className="text-xs text-[#555770]">Live seat counts update automatically in real-time via WebSocket</p>
               </div>
 
               {/* Subject Filter */}
               <div className="flex items-center gap-2">
-                <Filter className="w-3.5 h-3.5 text-slate-500" />
+                <Filter className="w-3.5 h-3.5 text-[#555770]" />
                 {['All', 'Science', 'Math', 'Coding'].map((subject) => (
                   <button
                     key={subject}
                     onClick={() => setSelectedSubject(subject)}
-                    className={`px-3 py-1 text-xs font-semibold rounded-sm border cursor-pointer transition-colors ${
+                    className={`px-3 py-1 text-xs font-bold rounded-sm border cursor-pointer transition-colors ${
                       selectedSubject === subject
-                        ? 'bg-indigo-600/30 border-indigo-500 text-indigo-300'
-                        : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200'
+                        ? 'bg-[#E73449] border-[#C72236] text-white'
+                        : 'bg-white border-[#EDE7DC] text-[#3F4159] hover:bg-[#FFF6E5]'
                     }`}
                   >
                     {subject}
@@ -477,8 +486,8 @@ export default function DashboardPage() {
             </div>
 
             {loading ? (
-              <div className="py-12 text-center text-slate-500 flex items-center justify-center gap-2">
-                <RefreshCw className="w-4 h-4 animate-spin text-indigo-400" />
+              <div className="py-12 text-center text-[#555770] flex items-center justify-center gap-2">
+                <RefreshCw className="w-4 h-4 animate-spin text-[#E73449]" />
                 Loading live trial classes...
               </div>
             ) : (
@@ -491,40 +500,40 @@ export default function DashboardPage() {
                   return (
                     <div
                       key={cls.id}
-                      className="bg-slate-900 border border-slate-800 rounded-sm p-6 flex flex-col justify-between hover:border-slate-700 transition-all shadow-xl group"
+                      className="bg-white border border-[#EDE7DC] rounded-sm p-6 flex flex-col justify-between hover:border-[#E73449]/40 transition-all shadow-[0_2px_0_rgba(21,23,43,0.05)] hover:shadow-md group"
                     >
                       <div>
                         <div className="flex items-center justify-between mb-3">
-                          <span className="px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider rounded-sm bg-indigo-950 text-indigo-300 border border-indigo-800/60">
+                          <span className="px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider rounded-sm bg-[#FFF6E5] text-[#E73449] border border-[#EDE7DC]">
                             {cls.subject}
                           </span>
 
-                          {/* Dynamic Seat Badge */}
+                          {/* Seat Badge */}
                           <span
                             className={`px-2.5 py-0.5 text-xs font-bold rounded-sm border ${
                               isFull
-                                ? 'bg-rose-950/80 text-rose-300 border-rose-800'
+                                ? 'bg-[#E73449] text-white border-[#C72236]'
                                 : isOneLeft
-                                ? 'bg-amber-950/80 text-amber-300 border-amber-800 animate-pulse'
-                                : 'bg-emerald-950/80 text-emerald-300 border-emerald-800'
+                                ? 'bg-[#FBAE24] text-[#15172B] border-[#E69612] animate-pulse'
+                                : 'bg-[#83C341] text-white border-[#6BA62F]'
                             }`}
                           >
                             {isFull ? 'FULL (0 seats)' : isOneLeft ? 'LAST SEAT LEFT!' : `${remaining} Seats Available`}
                           </span>
                         </div>
 
-                        <h3 className="text-base font-bold text-white mb-2 group-hover:text-indigo-400 transition-colors">
+                        <h3 className="font-serif text-xl font-bold text-[#15172B] mb-2 group-hover:text-[#E73449] transition-colors">
                           {cls.title}
                         </h3>
 
-                        <div className="space-y-1.5 text-xs text-slate-400 mb-6">
+                        <div className="space-y-1.5 text-xs text-[#3F4159] mb-6">
                           <div className="flex items-center gap-2">
-                            <Calendar className="w-3.5 h-3.5 text-slate-500" />
+                            <Calendar className="w-3.5 h-3.5 text-[#555770]" />
                             {new Date(cls.start_time).toLocaleString()}
                           </div>
                           <div className="flex items-center gap-2">
-                            <Users className="w-3.5 h-3.5 text-slate-500" />
-                            Dynamic Capacity: {cls.enrolled_count} / {cls.capacity} students confirmed
+                            <Users className="w-3.5 h-3.5 text-[#555770]" />
+                            Capacity: <strong className="text-[#15172B]">{cls.enrolled_count} / {cls.capacity}</strong> confirmed
                           </div>
                         </div>
                       </div>
@@ -535,10 +544,10 @@ export default function DashboardPage() {
                           setBookingModalClass(cls);
                           setBookingError(null);
                         }}
-                        className={`w-full py-2.5 px-4 rounded-sm text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all ${
+                        className={`w-full py-3 px-4 rounded-sm text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer transition-all ${
                           isFull
-                            ? 'bg-slate-800 text-slate-500 border border-slate-700/50 cursor-not-allowed'
-                            : 'bg-indigo-600 hover:bg-indigo-500 text-white border border-indigo-500 shadow-lg shadow-indigo-600/20'
+                            ? 'bg-[#EDE7DC] text-[#555770] border border-[#EDE7DC] cursor-not-allowed'
+                            : 'bg-[#E73449] hover:bg-[#C72236] text-white border border-[#C72236] shadow-[0_6px_0_-2px_rgba(231,52,73,0.35)]'
                         }`}
                       >
                         {isFull ? 'Class Fully Booked' : 'Book Trial Class'}
@@ -552,30 +561,30 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* TAB 2: MOCK PAYMENT GATEWAY & RACE TEST */}
+        {/* TAB 2: MOCK PAYMENT & RACE TEST */}
         {activeTab === 'payment' && (
           <div className="max-w-2xl mx-auto">
-            <div className="bg-slate-900 border border-slate-800 rounded-sm p-6 shadow-2xl">
-              <div className="flex items-center gap-3 mb-6 pb-4 border-b border-slate-800">
-                <div className="p-2.5 bg-indigo-600/20 border border-indigo-500/30 rounded-sm text-indigo-400">
+            <div className="bg-white border border-[#EDE7DC] rounded-sm p-6 shadow-xl">
+              <div className="flex items-center gap-3 mb-6 pb-4 border-b border-[#EDE7DC]">
+                <div className="p-2.5 bg-[#FFF6E5] border border-[#EDE7DC] rounded-sm text-[#E73449]">
                   <CreditCard className="w-6 h-6" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-bold text-white">Mock Payment Gateway Simulation</h2>
-                  <p className="text-xs text-slate-400">Test deterministic payment outcomes and last-seat concurrency protection</p>
+                  <h2 className="font-serif text-xl font-bold text-[#15172B]">Mock Payment Simulation</h2>
+                  <p className="text-xs text-[#555770]">Test deterministic payment outcomes and PostgreSQL row-locking concurrency protection</p>
                 </div>
               </div>
 
               {activeBooking ? (
                 <div className="space-y-6">
-                  <div className="bg-slate-950 border border-slate-800 p-4 rounded-sm space-y-2">
-                    <div className="text-xs font-bold uppercase tracking-wider text-slate-500">Active Pending Booking</div>
-                    <div className="text-sm font-bold text-white">{activeBooking.trial_class?.title || 'Trial Class Session'}</div>
-                    <div className="text-xs text-slate-400">Student: {activeBooking.student?.name || 'Child'}</div>
-                    <div className="text-[11px] font-mono text-indigo-400">Payment Token: {activeBooking.payment_token}</div>
-                    <div className="text-[11px] text-slate-500">
-                      Status:{' '}
-                      <span className="px-2 py-0.5 bg-amber-950 text-amber-400 rounded-sm border border-amber-800 font-bold">
+                  <div className="bg-[#FFF6E5] border border-[#EDE7DC] p-4 rounded-sm space-y-2">
+                    <div className="text-xs font-bold uppercase tracking-wider text-[#E73449]">Active Pending Booking</div>
+                    <div className="font-serif text-lg font-bold text-[#15172B]">{activeBooking.trial_class?.title || 'Trial Class Session'}</div>
+                    <div className="text-xs text-[#3F4159]">Student: <strong className="text-[#15172B]">{activeBooking.student?.name}</strong></div>
+                    <div className="text-[11px] font-mono text-[#555770]">Payment Token: {activeBooking.payment_token}</div>
+                    <div className="text-[11px] text-[#555770] flex items-center gap-2">
+                      Status:
+                      <span className="px-2 py-0.5 bg-[#FBAE24] text-[#15172B] rounded-sm font-bold">
                         {activeBooking.status}
                       </span>
                     </div>
@@ -586,15 +595,15 @@ export default function DashboardPage() {
                     <div
                       className={`p-4 rounded-sm border text-xs font-semibold ${
                         paymentResult.success
-                          ? 'bg-emerald-950/80 border-emerald-600 text-emerald-200'
-                          : 'bg-rose-950/80 border-rose-600 text-rose-200'
+                          ? 'bg-[#FFF6E5] border-[#83C341] text-[#15172B]'
+                          : 'bg-[#FFF6E5] border-[#E73449] text-[#C72236]'
                       }`}
                     >
                       <div className="flex items-center gap-2 mb-1">
                         {paymentResult.success ? (
-                          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                          <CheckCircle2 className="w-4 h-4 text-[#83C341]" />
                         ) : (
-                          <AlertTriangle className="w-4 h-4 text-rose-400" />
+                          <AlertTriangle className="w-4 h-4 text-[#E73449]" />
                         )}
                         <span className="font-bold">{paymentResult.success ? 'Transaction Result' : 'Transaction Failed'}</span>
                       </div>
@@ -606,7 +615,7 @@ export default function DashboardPage() {
                     <button
                       disabled={paymentLoading || activeBooking.status === 'confirmed'}
                       onClick={() => handleProcessPayment('success')}
-                      className="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-sm font-bold text-xs uppercase tracking-wider cursor-pointer disabled:opacity-50 transition-all flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/20"
+                      className="w-full py-3 px-4 bg-[#83C341] hover:bg-[#6BA62F] text-white rounded-sm font-bold text-xs uppercase tracking-wider cursor-pointer disabled:opacity-50 transition-all flex items-center justify-center gap-2 shadow-[0_6px_0_-2px_rgba(131,195,65,0.35)]"
                     >
                       <CheckCircle2 className="w-4 h-4" />
                       {paymentLoading ? 'Processing Payment...' : 'Simulate Successful Payment'}
@@ -615,7 +624,7 @@ export default function DashboardPage() {
                     <button
                       disabled={paymentLoading || activeBooking.status === 'confirmed'}
                       onClick={() => handleProcessPayment('fail_payment')}
-                      className="w-full py-3 px-4 bg-rose-950/80 hover:bg-rose-900 border border-rose-700 text-rose-200 rounded-sm font-bold text-xs uppercase tracking-wider cursor-pointer disabled:opacity-50 transition-all flex items-center justify-center gap-2"
+                      className="w-full py-3 px-4 bg-white hover:bg-[#FFF6E5] border border-[#E73449] text-[#C72236] rounded-sm font-bold text-xs uppercase tracking-wider cursor-pointer disabled:opacity-50 transition-all flex items-center justify-center gap-2"
                     >
                       <XCircle className="w-4 h-4" />
                       Simulate Card Declined / Failure
@@ -624,31 +633,31 @@ export default function DashboardPage() {
                 </div>
               ) : (
                 <div className="text-center py-8">
-                  <p className="text-xs text-slate-400 mb-4">No active pending booking. Pick a trial class from the catalog first!</p>
+                  <p className="text-xs text-[#555770] mb-4">No active pending booking. Pick a trial class from the catalog first!</p>
                   <button
                     onClick={() => setActiveTab('classes')}
-                    className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-sm text-xs font-bold cursor-pointer transition-colors"
+                    className="px-4 py-2.5 bg-[#E73449] hover:bg-[#C72236] text-white rounded-sm text-xs font-bold cursor-pointer transition-colors shadow-[0_6px_0_-2px_rgba(231,52,73,0.35)]"
                   >
                     Browse Trial Classes
                   </button>
                 </div>
               )}
 
-              {/* Last Seat Race Simulator Box */}
-              <div className="mt-8 border-t border-slate-800 pt-6">
-                <div className="flex items-center gap-2 mb-2 text-xs font-bold text-indigo-400 uppercase tracking-wider">
-                  <Zap className="w-4 h-4" />
-                  Last-Seat Race Condition Stress Tester
+              {/* Race Condition Simulator Box */}
+              <div className="mt-8 border-t border-[#EDE7DC] pt-6">
+                <div className="flex items-center gap-2 mb-2 text-xs font-bold text-[#E73449] uppercase tracking-wider">
+                  <Zap className="w-4 h-4 text-[#FBAE24]" />
+                  Last-Seat Concurrency Race Tester
                 </div>
-                <p className="text-xs text-slate-400 mb-4">
-                  Fires 2 simultaneous payment requests for the last remaining seat to verify PostgreSQL pessimistic lock (`SELECT ... FOR UPDATE`) protection.
+                <p className="text-xs text-[#555770] mb-4">
+                  Triggers 2 simultaneous payment requests for the last seat to verify PostgreSQL pessimistic lock (`SELECT ... FOR UPDATE`) protection.
                 </p>
                 <button
                   disabled={paymentLoading}
                   onClick={handleSimulateLastSeatRace}
-                  className="w-full py-3 px-4 bg-indigo-950 hover:bg-indigo-900 border border-indigo-700 text-indigo-200 rounded-sm font-bold text-xs uppercase tracking-wider cursor-pointer transition-all flex items-center justify-center gap-2"
+                  className="w-full py-3 px-4 bg-[#FFF6E5] hover:bg-[#FFECC9] border border-[#EDE7DC] text-[#15172B] rounded-sm font-bold text-xs uppercase tracking-wider cursor-pointer transition-all flex items-center justify-center gap-2"
                 >
-                  <Zap className="w-4 h-4 text-amber-400" />
+                  <Zap className="w-4 h-4 text-[#E73449]" />
                   Trigger Simultaneous Last-Seat Race Test
                 </button>
               </div>
@@ -659,28 +668,28 @@ export default function DashboardPage() {
         {/* TAB 3: BOOKING STATUS VIEW */}
         {activeTab === 'bookings' && (
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-xl font-bold text-white mb-6">Submitted Booking Records</h2>
+            <h2 className="font-serif text-2xl font-bold text-[#15172B] mb-6">Submitted Booking Records</h2>
             {userBookings.length === 0 ? (
-              <div className="bg-slate-900 border border-slate-800 p-8 rounded-sm text-center text-slate-400 text-xs">
+              <div className="bg-white border border-[#EDE7DC] p-8 rounded-sm text-center text-[#555770] text-xs shadow-sm">
                 No bookings submitted in this session yet. Pick a class and complete payment to view records.
               </div>
             ) : (
               <div className="space-y-4">
                 {userBookings.map((b) => (
-                  <div key={b.id} className="bg-slate-900 border border-slate-800 p-5 rounded-sm flex items-center justify-between shadow-lg">
+                  <div key={b.id} className="bg-white border border-[#EDE7DC] p-5 rounded-sm flex items-center justify-between shadow-sm">
                     <div>
-                      <div className="text-sm font-bold text-white mb-1">{b.trial_class?.title || 'Trial Class Session'}</div>
-                      <div className="text-xs text-slate-400">Student: {b.student?.name}</div>
-                      <div className="text-[11px] font-mono text-indigo-400">Payment Token: {b.payment_token}</div>
+                      <div className="font-serif text-lg font-bold text-[#15172B] mb-1">{b.trial_class?.title || 'Trial Class Session'}</div>
+                      <div className="text-xs text-[#3F4159]">Student: <strong className="text-[#15172B]">{b.student?.name}</strong></div>
+                      <div className="text-[11px] font-mono text-[#555770]">Payment Token: {b.payment_token}</div>
                     </div>
                     <div>
                       <span
                         className={`px-3 py-1 rounded-sm text-xs font-bold uppercase tracking-wider border ${
                           b.status === 'confirmed'
-                            ? 'bg-emerald-950 text-emerald-300 border-emerald-800'
+                            ? 'bg-[#83C341] text-white border-[#6BA62F]'
                             : b.status === 'pending_payment'
-                            ? 'bg-amber-950 text-amber-300 border-amber-800'
-                            : 'bg-rose-950 text-rose-300 border-rose-800'
+                            ? 'bg-[#FBAE24] text-[#15172B] border-[#E69612]'
+                            : 'bg-[#E73449] text-white border-[#C72236]'
                         }`}
                       >
                         {b.status}
@@ -698,17 +707,17 @@ export default function DashboardPage() {
           <div>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
               <div>
-                <h2 className="text-xl font-bold text-white">Teacher Roster & Dynamic Capacity Engine</h2>
-                <p className="text-xs text-slate-400">View real-time confirmed rosters and edit dynamic student limits</p>
+                <h2 className="font-serif text-2xl font-bold text-[#15172B]">Teacher Roster &amp; Dynamic Capacity</h2>
+                <p className="text-xs text-[#555770]">View real-time confirmed rosters and edit dynamic student capacity limits</p>
               </div>
 
-              {/* Class Selector for Roster */}
+              {/* Class Selector */}
               <div className="flex items-center gap-2">
-                <label className="text-xs text-slate-400">Select Class:</label>
+                <label className="text-xs font-semibold text-[#555770]">Select Class:</label>
                 <select
                   value={selectedRosterClassId}
                   onChange={(e) => setSelectedRosterClassId(e.target.value)}
-                  className="bg-slate-900 border border-slate-800 text-xs font-semibold text-white px-3 py-2 rounded-sm focus:outline-none cursor-pointer"
+                  className="bg-white border border-[#EDE7DC] text-xs font-bold text-[#15172B] px-3 py-2 rounded-sm focus:outline-none cursor-pointer"
                 >
                   {classes.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -720,12 +729,12 @@ export default function DashboardPage() {
             </div>
 
             {rosterData && (
-              <div className="bg-slate-900 border border-slate-800 rounded-sm p-6 shadow-xl">
-                <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
+              <div className="bg-white border border-[#EDE7DC] rounded-sm p-6 shadow-sm">
+                <div className="flex items-center justify-between pb-4 border-b border-[#EDE7DC] mb-6">
                   <div>
-                    <h3 className="text-base font-bold text-white">{rosterData.class.title}</h3>
-                    <p className="text-xs text-slate-400">
-                      Confirmed Enrollment: {rosterData.count} / {rosterData.capacity} Students
+                    <h3 className="font-serif text-xl font-bold text-[#15172B]">{rosterData.class.title}</h3>
+                    <p className="text-xs text-[#555770]">
+                      Confirmed Enrollment: <strong className="text-[#15172B]">{rosterData.count} / {rosterData.capacity}</strong> Students
                     </p>
                   </div>
 
@@ -736,7 +745,7 @@ export default function DashboardPage() {
                       setEditTitle(rosterData.class.title);
                       setEditSubject(rosterData.class.subject);
                     }}
-                    className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-sm text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors shadow-md shadow-indigo-600/20"
+                    className="px-4 py-2 bg-[#E73449] hover:bg-[#C72236] text-white rounded-sm text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors shadow-[0_6px_0_-2px_rgba(231,52,73,0.35)]"
                   >
                     <Edit2 className="w-3.5 h-3.5" />
                     Edit Class Capacity Limit
@@ -744,8 +753,8 @@ export default function DashboardPage() {
                 </div>
 
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs text-slate-300">
-                    <thead className="bg-slate-950 text-slate-400 uppercase tracking-wider font-semibold">
+                  <table className="w-full text-left text-xs text-[#15172B]">
+                    <thead className="bg-[#FFF6E5] text-[#15172B] uppercase tracking-wider font-bold">
                       <tr>
                         <th className="px-4 py-3">#</th>
                         <th className="px-4 py-3">Student Name</th>
@@ -755,26 +764,26 @@ export default function DashboardPage() {
                         <th className="px-4 py-3">Status</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-800">
+                    <tbody className="divide-y divide-[#EDE7DC]">
                       {rosterData.roster.length === 0 ? (
                         <tr>
-                          <td colSpan={6} className="px-4 py-6 text-center text-slate-500">
+                          <td colSpan={6} className="px-4 py-6 text-center text-[#555770]">
                             No confirmed students in this trial class roster yet.
                           </td>
                         </tr>
                       ) : (
                         rosterData.roster.map((item, idx) => (
-                          <tr key={item.id} className="hover:bg-slate-800/40">
-                            <td className="px-4 py-3 text-slate-500 font-mono">{idx + 1}</td>
-                            <td className="px-4 py-3 font-bold text-white">{item.student?.name}</td>
+                          <tr key={item.id} className="hover:bg-[#FFF6E5]/50">
+                            <td className="px-4 py-3 text-[#555770] font-mono">{idx + 1}</td>
+                            <td className="px-4 py-3 font-bold text-[#15172B]">{item.student?.name}</td>
                             <td className="px-4 py-3">{item.student?.age} y.o</td>
-                            <td className="px-4 py-3 text-indigo-300">{item.student?.parent?.name}</td>
-                            <td className="px-4 py-3 text-slate-400">
+                            <td className="px-4 py-3 text-[#E73449] font-semibold">{item.student?.parent?.name}</td>
+                            <td className="px-4 py-3 text-[#3F4159]">
                               {item.student?.parent?.email} <br />
-                              <span className="text-[11px] text-slate-500">{item.student?.parent?.phone}</span>
+                              <span className="text-[11px] text-[#555770]">{item.student?.parent?.phone}</span>
                             </td>
                             <td className="px-4 py-3">
-                              <span className="px-2 py-0.5 bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold rounded-sm text-[10px]">
+                              <span className="px-2 py-0.5 bg-[#83C341] text-white font-bold rounded-sm text-[10px]">
                                 CONFIRMED
                               </span>
                             </td>
@@ -792,35 +801,35 @@ export default function DashboardPage() {
 
       {/* MODAL 1: BOOKING INITIATION */}
       {bookingModalClass && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-sm max-w-md w-full p-6 shadow-2xl">
-            <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
-              <h3 className="text-base font-bold text-white">Book Trial Class</h3>
+        <div className="fixed inset-0 bg-[#15172B]/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white border border-[#EDE7DC] rounded-sm max-w-md w-full p-6 shadow-2xl">
+            <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#EDE7DC]">
+              <h3 className="font-serif text-lg font-bold text-[#15172B]">Book Trial Class</h3>
               <button
                 onClick={() => setBookingModalClass(null)}
-                className="text-slate-400 hover:text-white cursor-pointer"
+                className="text-[#555770] hover:text-[#E73449] cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {bookingError && (
-              <div className="mb-4 p-3 bg-rose-950 border border-rose-700 text-rose-200 text-xs rounded-sm">
+              <div className="mb-4 p-3 bg-[#FFF6E5] border border-[#E73449]/40 text-[#C72236] text-xs rounded-sm font-semibold">
                 {bookingError}
               </div>
             )}
 
             <div className="space-y-4 text-xs mb-6">
-              <div className="bg-slate-950 p-3 rounded-sm border border-slate-800">
-                <div className="font-bold text-white text-sm">{bookingModalClass.title}</div>
-                <div className="text-indigo-400 font-semibold">{bookingModalClass.subject}</div>
-                <div className="text-slate-400 mt-1">{new Date(bookingModalClass.start_time).toLocaleString()}</div>
+              <div className="bg-[#FFF6E5] p-3 rounded-sm border border-[#EDE7DC]">
+                <div className="font-serif font-bold text-[#15172B] text-base">{bookingModalClass.title}</div>
+                <div className="text-[#E73449] font-bold">{bookingModalClass.subject}</div>
+                <div className="text-[#555770] mt-1">{new Date(bookingModalClass.start_time).toLocaleString()}</div>
               </div>
 
               <div>
-                <label className="block text-slate-400 font-semibold mb-1">Confirm Selected Student:</label>
-                <div className="p-2.5 bg-slate-950 border border-indigo-600/50 text-indigo-300 font-bold rounded-sm flex items-center gap-2">
-                  <User className="w-4 h-4 text-indigo-400" />
+                <label className="block text-[#555770] font-semibold mb-1">Confirm Selected Student:</label>
+                <div className="p-3 bg-white border border-[#EDE7DC] text-[#15172B] font-bold rounded-sm flex items-center gap-2">
+                  <User className="w-4 h-4 text-[#E73449]" />
                   {selectedStudent?.name} ({selectedStudent?.age} years old)
                 </div>
               </div>
@@ -829,14 +838,14 @@ export default function DashboardPage() {
             <div className="flex items-center justify-end gap-3">
               <button
                 onClick={() => setBookingModalClass(null)}
-                className="px-4 py-2 text-slate-400 hover:text-white text-xs font-semibold cursor-pointer"
+                className="px-4 py-2 text-[#555770] hover:text-[#15172B] text-xs font-semibold cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 disabled={bookingLoading}
                 onClick={handleInitiateBooking}
-                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-sm cursor-pointer shadow-lg shadow-indigo-600/20"
+                className="px-5 py-2.5 bg-[#E73449] hover:bg-[#C72236] text-white text-xs font-bold rounded-sm cursor-pointer shadow-[0_6px_0_-2px_rgba(231,52,73,0.35)]"
               >
                 {bookingLoading ? 'Initiating...' : 'Proceed to Payment'}
               </button>
@@ -847,35 +856,35 @@ export default function DashboardPage() {
 
       {/* MODAL 2: ADMIN EDIT CLASS CAPACITY */}
       {editClassModal && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-sm max-w-md w-full p-6 shadow-2xl">
-            <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-800">
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Edit2 className="w-4 h-4 text-indigo-400" />
+        <div className="fixed inset-0 bg-[#15172B]/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white border border-[#EDE7DC] rounded-sm max-w-md w-full p-6 shadow-2xl">
+            <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#EDE7DC]">
+              <h3 className="font-serif text-lg font-bold text-[#15172B] flex items-center gap-2">
+                <Edit2 className="w-4 h-4 text-[#E73449]" />
                 Edit Dynamic Student Limit
               </h3>
-              <button onClick={() => setEditClassModal(null)} className="text-slate-400 hover:text-white cursor-pointer">
+              <button onClick={() => setEditClassModal(null)} className="text-[#555770] hover:text-[#E73449] cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={handleUpdateCapacitySubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1">Class Title</label>
+                <label className="block text-xs font-bold text-[#15172B] mb-1">Class Title</label>
                 <input
                   type="text"
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 p-2.5 text-xs text-white rounded-sm focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-white border border-[#EDE7DC] p-2.5 text-xs text-[#15172B] rounded-sm focus:outline-none focus:border-[#E73449]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1">Subject</label>
+                <label className="block text-xs font-bold text-[#15172B] mb-1">Subject</label>
                 <select
                   value={editSubject}
                   onChange={(e) => setEditSubject(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 p-2.5 text-xs text-white rounded-sm focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-white border border-[#EDE7DC] p-2.5 text-xs text-[#15172B] rounded-sm focus:outline-none focus:border-[#E73449]"
                 >
                   <option value="Science">Science</option>
                   <option value="Math">Math</option>
@@ -884,7 +893,7 @@ export default function DashboardPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-slate-400 mb-1">
+                <label className="block text-xs font-bold text-[#15172B] mb-1">
                   Dynamic Capacity (Student Limit per class)
                 </label>
                 <input
@@ -893,25 +902,25 @@ export default function DashboardPage() {
                   max="50"
                   value={editCapacity}
                   onChange={(e) => setEditCapacity(parseInt(e.target.value) || 1)}
-                  className="w-full bg-slate-950 border border-slate-800 p-2.5 text-xs text-white rounded-sm font-bold focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-white border border-[#EDE7DC] p-2.5 text-xs text-[#15172B] rounded-sm font-bold focus:outline-none focus:border-[#E73449]"
                 />
-                <p className="text-[11px] text-slate-500 mt-1">
+                <p className="text-[11px] text-[#555770] mt-1">
                   Current Enrolled: {editClassModal.enrolled_count}. New limit cannot be set below currently enrolled count.
                 </p>
               </div>
 
-              <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+              <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#EDE7DC]">
                 <button
                   type="button"
                   onClick={() => setEditClassModal(null)}
-                  className="px-4 py-2 text-slate-400 hover:text-white text-xs font-semibold cursor-pointer"
+                  className="px-4 py-2 text-[#555770] hover:text-[#15172B] text-xs font-semibold cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={editLoading}
-                  className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-sm cursor-pointer shadow-lg shadow-indigo-600/20"
+                  className="px-5 py-2.5 bg-[#E73449] hover:bg-[#C72236] text-white text-xs font-bold rounded-sm cursor-pointer shadow-[0_6px_0_-2px_rgba(231,52,73,0.35)]"
                 >
                   {editLoading ? 'Saving...' : 'Save Capacity Limit'}
                 </button>
