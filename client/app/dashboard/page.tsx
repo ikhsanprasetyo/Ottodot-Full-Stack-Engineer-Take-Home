@@ -421,6 +421,8 @@ export default function DashboardPage() {
       {
         accessorKey: 'title',
         header: 'Class Title',
+        size: 400,
+        minSize: 320,
         cell: ({ row }) => {
           const cls = row.original;
           const isSelected = selectedRosterClassId === cls.id;
@@ -552,7 +554,7 @@ export default function DashboardPage() {
       <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-[#EDE7DC]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Logo size="md" href="/dashboard" />
+            <Logo size="sm" href="/dashboard" />
             <span className="text-xs text-[#E73449] font-bold px-2 py-0.5 bg-[#FFF6E5] border border-[#EDE7DC] rounded-sm uppercase tracking-wider">
               Tuition Portal
             </span>
@@ -1049,19 +1051,19 @@ export default function DashboardPage() {
                 description="Select any class row to view active roster & manage capacity limits"
                 data={classes}
                 columns={adminClassColumns}
-                actionsColumnSize={210}
+                actionsColumnSize={150}
                 renderActions={(cls) => {
                   const isSelected = selectedRosterClassId === cls.id;
                   return (
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5">
                       <Button
                         size="sm"
                         variant={isSelected ? 'default' : 'outline'}
                         onClick={() => setSelectedRosterClassId(cls.id)}
                         className={
                           isSelected
-                            ? 'bg-[#E73449] text-white hover:bg-[#C72236] shadow-xs font-bold'
-                            : 'text-[#15172B] border-[#EDE7DC] hover:bg-[#FFF6E5] hover:border-[#E73449] font-medium'
+                            ? 'bg-[#E73449] text-white hover:bg-[#C72236] shadow-xs font-bold px-2.5'
+                            : 'text-[#15172B] border-[#EDE7DC] hover:bg-[#FFF6E5] hover:border-[#E73449] font-medium px-2.5'
                         }
                       >
                         <Users className="w-3.5 h-3.5 mr-1" />
@@ -1077,7 +1079,7 @@ export default function DashboardPage() {
                           setEditTitle(cls.title);
                           setEditSubject(cls.subject);
                         }}
-                        className="text-[#E73449] border-[#EDE7DC] hover:bg-[#FFF6E5] hover:border-[#E73449] font-medium"
+                        className="text-[#E73449] border-[#EDE7DC] hover:bg-[#FFF6E5] hover:border-[#E73449] font-medium px-2.5"
                       >
                         <Edit2 className="w-3.5 h-3.5 mr-1" />
                         Edit

@@ -75,7 +75,7 @@ export default function LoginPage() {
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center relative z-10">
         <div className="flex justify-center mb-4">
-          <Logo size="md" href="/" />
+          <Logo size="sm" href="/" />
         </div>
 
         <div className="inline-flex items-center gap-2 bg-white border border-[#EDE7DC] px-4 py-2 rounded-sm shadow-sm mb-4">
