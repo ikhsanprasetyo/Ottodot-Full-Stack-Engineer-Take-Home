@@ -6,11 +6,13 @@
 
 ## 📌 Executive Summary
 
+> **"The Ottodot Trial Booking System is a high-concurrency, real-time trial class booking platform engineered to solve the 'Last-Seat Overbooking' race condition. Built using a Go (Gin) REST Backend, PostgreSQL relational database, Next.js (App Router) SPA Frontend, and WebSockets, the system guarantees 100% data integrity, zero double-bookings, and dynamic capacity management with zero downtime deployment."**
+
 This repository contains the complete, production-grade implementation of the **Ottodot Trial Booking Reliability System**. Built for live online science and math classes for children, the system guarantees 100% data reliability under heavy concurrency, dynamic class capacity limits, duplicate booking prevention, payment failures, and the critical **Last-Seat Race Condition**.
 
 - **Frontend Application**: `https://ottodot.byteseeker.net` (Next.js Static Export Client SPA)
 - **Backend REST API & WebSocket Server**: `https://serverottodot.byteseeker.net` (Go Gin Framework on Port `9050`)
-- **Database Engine**: PostgreSQL 16+ (Sole Database Engine, MongoDB completely removed)
+- **Database Engine**: PostgreSQL 16+ (Sole Database Engine, pure relational schema)
 
 ---
 
