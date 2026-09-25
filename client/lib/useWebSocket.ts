@@ -65,4 +65,3 @@ export function useWebSocket(onMessage: (data: any) => void) {
 
   return { isConnected };
 }
-

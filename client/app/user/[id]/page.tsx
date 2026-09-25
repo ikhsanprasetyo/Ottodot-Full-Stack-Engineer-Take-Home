@@ -7,4 +7,3 @@ export function generateStaticParams() {
 export default function UserRedirectPage() {
   redirect('/dashboard');
 }
-
