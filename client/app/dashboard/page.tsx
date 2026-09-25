@@ -204,7 +204,7 @@ export default function DashboardPage() {
   }, [loadData]);
 
   // WebSocket Live Updates Handler
-  useWebSocket(
+  const { isConnected } = useWebSocket(
     useCallback(
       (event: any) => {
         if (event.type === 'SEAT_UPDATE') {
@@ -593,6 +593,16 @@ export default function DashboardPage() {
             <span className="text-xs text-[#E73449] font-bold px-2 py-0.5 bg-[#FFF6E5] border border-[#EDE7DC] rounded-sm uppercase tracking-wider">
               Tuition Portal
             </span>
+            <div className="flex items-center gap-1.5 px-2.5 py-0.5 bg-emerald-50 border border-emerald-200 rounded-sm">
+              <span
+                className={`w-2 h-2 rounded-full ${
+                  isConnected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-400'
+                }`}
+              />
+              <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wide">
+                {isConnected ? 'Realtime Connected' : 'Connecting Realtime...'}
+              </span>
+            </div>
           </div>
 
           <div className="flex items-center gap-3">
@@ -1070,9 +1080,23 @@ export default function DashboardPage() {
         {activeTab === 'admin' && userRole === 'admin' && (
           <div className="space-y-8">
             <div>
-              <h2 className="font-serif text-2xl font-bold text-[#15172B]">
-                Teacher Roster &amp; Dynamic Capacity Engine
-              </h2>
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <h2 className="font-serif text-2xl font-bold text-[#15172B]">
+                  Teacher Roster &amp; Dynamic Capacity Engine
+                </h2>
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 border border-emerald-200 rounded-sm">
+                  <span
+                    className={`w-2 h-2 rounded-full ${
+                      isConnected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-400'
+                    }`}
+                  />
+                  <span className="text-xs font-bold text-emerald-700">
+                    {isConnected
+                      ? 'Realtime Sync Active'
+                      : 'Connecting Realtime...'}
+                  </span>
+                </div>
+              </div>
               <p className="text-xs text-[#555770] mt-1">
                 Select a class from the table below to inspect real-time
                 confirmed student roster and edit dynamic student limits

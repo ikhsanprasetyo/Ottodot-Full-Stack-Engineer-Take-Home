@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const getWsUrl = () => {
   if (process.env.NEXT_PUBLIC_WS_URL) return process.env.NEXT_PUBLIC_WS_URL;
@@ -14,6 +14,7 @@ const getWsUrl = () => {
 
 export function useWebSocket(onMessage: (data: any) => void) {
   const wsRef = useRef<WebSocket | null>(null);
+  const [isConnected, setIsConnected] = useState<boolean>(false);
 
   useEffect(() => {
     let socketUrl = getWsUrl();
@@ -24,6 +25,10 @@ export function useWebSocket(onMessage: (data: any) => void) {
     try {
       const ws = new WebSocket(socketUrl);
       wsRef.current = ws;
+
+      ws.onopen = () => {
+        setIsConnected(true);
+      };
 
       ws.onmessage = (event) => {
         try {
@@ -36,6 +41,11 @@ export function useWebSocket(onMessage: (data: any) => void) {
 
       ws.onerror = (err) => {
         console.warn('WebSocket connection error:', err);
+        setIsConnected(false);
+      };
+
+      ws.onclose = () => {
+        setIsConnected(false);
       };
 
       return () => {
@@ -45,9 +55,14 @@ export function useWebSocket(onMessage: (data: any) => void) {
         ) {
           ws.close();
         }
+        setIsConnected(false);
       };
     } catch (e) {
       console.warn('WebSocket init failed:', e);
+      setIsConnected(false);
     }
   }, [onMessage]);
+
+  return { isConnected };
 }
+
