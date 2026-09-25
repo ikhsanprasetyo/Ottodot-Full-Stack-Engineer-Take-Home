@@ -26,7 +26,7 @@ var (
 func GenerateAccessToken(user *models.User, secret string) (string, error) {
 	claims := JWTClaims{
 		UserID:       user.ID.String(),
-		TokenVersion: user.TokenVersion,
+		TokenVersion: 1,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(4 * time.Hour)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
@@ -42,7 +42,7 @@ func GenerateAccessToken(user *models.User, secret string) (string, error) {
 func GenerateRefreshToken(user *models.User, secret string) (string, error) {
 	claims := JWTClaims{
 		UserID:       user.ID.String(),
-		TokenVersion: user.TokenVersion,
+		TokenVersion: 1,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(30 * 24 * time.Hour)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),

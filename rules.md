@@ -22,8 +22,8 @@
 ### Backend Application (`server-go/`)
 - Base Directory: `c:\Project\Web\Ottodot Full-Stack Engineer Take-Home\server-go`
 - Main Entrypoint: `server-go/cmd/api/main.go`
-- Ottodot Data Models: `server-go/internal/models/ottodot.go`
-- Repository & Concurrency Engine: `server-go/internal/repositories/ottodot_repository.go` (Pessimistic Row Locks `SELECT ... FOR UPDATE`)
+- Ottodot Data Models: `server-go/internal/models/ottodot.go` & `server-go/internal/models/user.go`
+- Repository & Concurrency Engine: `server-go/internal/repositories/ottodot_repository.go` & `server-go/internal/repositories/user_repository.go` (Pessimistic Row Locks `SELECT ... FOR UPDATE`)
 - HTTP Controllers: `server-go/internal/controllers/ottodot_controller.go`, `server-go/internal/controllers/auth_controller.go`
 - WebSocket Event Hub: `server-go/internal/websocket/hub.go`
 - Synthetic Seed Loader: `server-go/internal/data/seed.go`
