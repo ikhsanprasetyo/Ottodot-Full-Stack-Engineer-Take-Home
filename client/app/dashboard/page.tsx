@@ -87,6 +87,41 @@ export default function DashboardPage() {
   // Demo user role
   const [userRole, setUserRole] = useState<string>('parent');
 
+  // Admin Table Filters
+  const [adminFilterSubject, setAdminFilterSubject] = useState<string>('ALL');
+  const [adminFilterCapacity, setAdminFilterCapacity] = useState<string>('ALL');
+
+  // Extract unique subjects from classes
+  const availableSubjects = useMemo(() => {
+    const set = new Set<string>();
+    classes.forEach((c) => {
+      if (c.subject) set.add(c.subject.toUpperCase());
+    });
+    return Array.from(set);
+  }, [classes]);
+
+  // Filter classes for Admin Table
+  const filteredAdminClasses = useMemo(() => {
+    return classes.filter((cls) => {
+      // 1. Subject Filter
+      if (
+        adminFilterSubject !== 'ALL' &&
+        cls.subject.toUpperCase() !== adminFilterSubject.toUpperCase()
+      ) {
+        return false;
+      }
+      // 2. Capacity Filter
+      if (adminFilterCapacity === 'AVAILABLE') {
+        if (cls.enrolled_count >= cls.capacity) return false;
+      } else if (adminFilterCapacity === 'FULL') {
+        if (cls.enrolled_count < cls.capacity) return false;
+      } else if (adminFilterCapacity === 'EMPTY') {
+        if (cls.enrolled_count !== 0) return false;
+      }
+      return true;
+    });
+  }, [classes, adminFilterSubject, adminFilterCapacity]);
+
   // Fetch initial data cleanly
   const loadData = useCallback(async () => {
     try {
@@ -1044,12 +1079,75 @@ export default function DashboardPage() {
               </p>
             </div>
 
+            {/* Filter Controls for Trial Classes */}
+            <div className="bg-white rounded-sm border border-[#EDE7DC] p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-2 text-sm font-bold text-[#15172B]">
+                <Filter className="w-4 h-4 text-[#E73449]" />
+                <span>Filter Classes:</span>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3">
+                {/* 1. Subject Filter */}
+                <div className="flex items-center gap-2">
+                  <label className="text-xs font-semibold text-[#555770]">
+                    Subject:
+                  </label>
+                  <select
+                    value={adminFilterSubject}
+                    onChange={(e) => setAdminFilterSubject(e.target.value)}
+                    className="text-xs font-semibold bg-[#FFF6E5] text-[#15172B] border border-[#EDE7DC] rounded-sm px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#E73449] cursor-pointer"
+                  >
+                    <option value="ALL">All Subjects ({classes.length})</option>
+                    {availableSubjects.map((subj) => (
+                      <option key={subj} value={subj}>
+                        {subj}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* 2. Capacity Student Filter */}
+                <div className="flex items-center gap-2">
+                  <label className="text-xs font-semibold text-[#555770]">
+                    Capacity:
+                  </label>
+                  <select
+                    value={adminFilterCapacity}
+                    onChange={(e) => setAdminFilterCapacity(e.target.value)}
+                    className="text-xs font-semibold bg-[#FFF6E5] text-[#15172B] border border-[#EDE7DC] rounded-sm px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-[#E73449] cursor-pointer"
+                  >
+                    <option value="ALL">All Capacity Statuses</option>
+                    <option value="AVAILABLE">Available Seats (Not Full)</option>
+                    <option value="FULL">Full Capacity</option>
+                    <option value="EMPTY">Empty (0 Enrolled)</option>
+                  </select>
+                </div>
+
+                {/* Reset Filters */}
+                {(adminFilterSubject !== 'ALL' ||
+                  adminFilterCapacity !== 'ALL') && (
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => {
+                      setAdminFilterSubject('ALL');
+                      setAdminFilterCapacity('ALL');
+                    }}
+                    className="text-xs text-[#E73449] hover:bg-[#FFF6E5] h-8 px-2.5 rounded-sm font-medium"
+                  >
+                    <XCircle className="w-3.5 h-3.5 mr-1" />
+                    Reset Filters
+                  </Button>
+                )}
+              </div>
+            </div>
+
             {/* 1. Classes Selection Table using TableData component */}
             <div>
               <TableData<TrialClass>
                 title="All Trial Classes & Capacity Limits"
                 description="Select any class row to view active roster & manage capacity limits"
-                data={classes}
+                data={filteredAdminClasses}
                 columns={adminClassColumns}
                 actionsColumnSize={150}
                 renderActions={(cls) => {

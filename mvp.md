@@ -74,6 +74,7 @@
 - **2026-09-25**: Added `.env` to [`server-go/.gitignore`](file:///c:/Project/Web/Ottodot%20Full-Stack%20Engineer%20Take-Home/server-go/.gitignore) and created [`server-go/.env.example`](file:///c:/Project/Web/Ottodot%20Full-Stack%20Engineer%20Take-Home/server-go/.env.example) template to prevent sensitive environment variables from being committed to Git.
 - **2026-09-25**: Executed `git rm --cached server-go/.env` to completely remove [`server-go/.env`](file:///c:/Project/Web/Ottodot%20Full-Stack%20Engineer%20Take-Home/server-go/.env) from Git tracking index while retaining the local file on disk.
 - **2026-09-25**: Adjusted Teacher Admin table column layout in [`dashboard/page.tsx`](file:///c:/Project/Web/Ottodot%20Full-Stack%20Engineer%20Take-Home/client/app/dashboard/page.tsx), widening the **Class Title** column (`size: 400`, `minSize: 320`) and narrowing the **Actions** column (`actionsColumnSize: 150`) for cleaner visual balance.
+- **2026-09-25**: Added Filter Controls bar above **All Trial Classes & Capacity Limits** table in [`dashboard/page.tsx`](file:///c:/Project/Web/Ottodot%20Full-Stack%20Engineer%20Take-Home/client/app/dashboard/page.tsx), supporting filtering by **Subject** (Science, Math, Coding, All) and **Capacity Status** (Available Seats, Full Capacity, Empty, All).
 
 
 
