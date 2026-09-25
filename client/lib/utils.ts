@@ -9,11 +9,15 @@ export const getApi = (): string => {
   const apiUrl = process.env.NEXT_PUBLIC_API;
 
   if (!apiUrl) {
-    console.warn('⚠️ NEXT_PUBLIC_API belum diset di .env');
-    return '';
+    if (typeof window !== 'undefined') {
+      const isLocal =
+        window.location.hostname === 'localhost' ||
+        window.location.hostname === '127.0.0.1';
+      if (isLocal) return 'http://localhost:9050/api/v1';
+    }
+    return 'https://serverottodot.byteseeker.net/api/v1';
   }
 
-  //console.log(`🔗 Menggunakan API URL: ${apiUrl}`);
   return apiUrl;
 };
 

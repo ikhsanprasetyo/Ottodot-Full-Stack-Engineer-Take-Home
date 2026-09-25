@@ -1,10 +1,14 @@
-import { Suspense } from 'react';
-import ResetPasswordPage from './reset-password-page';
+'use client';
 
-export default function Page() {
-  return (
-    <Suspense fallback={null}>
-      <ResetPasswordPage />
-    </Suspense>
-  );
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
+export default function ResetPasswordRedirectPage() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace('/dashboard');
+  }, [router]);
+
+  return null;
 }

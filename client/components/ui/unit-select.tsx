@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import { ReusableSelect } from './reusable-select';
-import { useGetRTUUnits } from '@/lib/hooks/queries/rtu-unit';
 
 export const UNIT_OPTIONS = [
   { label: 'kg', value: 'kg' },
@@ -37,23 +36,11 @@ export const UnitSelect: React.FC<UnitSelectProps> = ({
   className = '',
   showDefaultSelect = true
 }) => {
-  const { data: unitsData } = useGetRTUUnits('', true); // only active units
+  const options = UNIT_OPTIONS;
 
-  const options = React.useMemo(() => {
-    if (unitsData?.data && unitsData.data.length > 0) {
-      return unitsData.data.map((u: any) => ({
-        label: u.name,
-        value: u.name
-      }));
-    }
-    return UNIT_OPTIONS;
-  }, [unitsData]);
-
-  // If react-hook-form object is provided
   if (form) {
     const selectedValue = form.watch(name);
-    const formError = form.formState.errors[name]?.message as
-      string | undefined;
+    const formError = form.formState.errors[name]?.message as string | undefined;
 
     return (
       <div className={`flex flex-col space-y-2 w-full ${containerClassName}`}>
@@ -81,7 +68,6 @@ export const UnitSelect: React.FC<UnitSelectProps> = ({
     );
   }
 
-  // Stateless component usage
   return (
     <div className={`flex flex-col space-y-2 w-full ${containerClassName}`}>
       {label && (

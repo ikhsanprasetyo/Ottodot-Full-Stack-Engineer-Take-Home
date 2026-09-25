@@ -10,70 +10,22 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from '@/components/ui/breadcrumb';
-import { useGetOutlet } from '@/lib/hooks/queries/outlet';
-import { useGetUser } from '@/lib/hooks/queries/user';
 import { formatHumanReadableString } from '@/lib/utils';
 
-const UUID_REGEX =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
 const STATIC_MAPPING: Record<string, string> = {
-  hrd: 'HRD',
-  pr: 'Cust Exp',
-  finance: 'Finance',
-  operations: 'Operations',
-  summary: 'Summary',
-  user: 'Users',
-  outlet: 'Outlets',
-  new: 'Baru'
+  dashboard: 'Dashboard',
+  classes: 'Trial Classes',
+  roster: 'Student Roster',
+  bookings: 'Booking Records',
+  user: 'User',
+  admin: 'Admin Console'
 };
 
-function ResolvedBreadcrumbLabel({
-  segment,
-  path,
-  index
-}: {
-  segment: string;
-  path: string[];
-  index: number;
-}) {
-  const isId = UUID_REGEX.test(segment);
-  const parentSegment = index > 0 ? path[index - 1] : '';
-
-  // Hooks MUST be called unconditionally at the top level
-  const { data: outletRes } = useGetOutlet(
-    isId && parentSegment === 'outlet' ? segment : undefined
-  );
-  const { data: userRes } = useGetUser(
-    isId && (parentSegment === 'user' || parentSegment === 'users')
-      ? segment
-      : undefined
-  );
-
-  // 1. Static Mapping
-  if (!isId && STATIC_MAPPING[segment.toLowerCase()]) {
+function ResolvedBreadcrumbLabel({ segment }: { segment: string }) {
+  if (STATIC_MAPPING[segment.toLowerCase()]) {
     return STATIC_MAPPING[segment.toLowerCase()];
   }
-
-  // 2. Fallback for non-ID
-  if (!isId) {
-    return formatHumanReadableString(segment);
-  }
-
-  // 3. Dynamic Resolution for IDs
-  // Outlet context
-  const outlet = outletRes?.data;
-  if (parentSegment === 'outlet' && outlet) {
-    return outlet.label || outlet.name;
-  }
-
-  // User context
-  const user = userRes?.data;
-  if ((parentSegment === 'user' || parentSegment === 'users') && user) {
-    return user.name;
-  }
-
-  return '...';
+  return formatHumanReadableString(segment);
 }
 
 export default function DashboardBreadcrumb() {
@@ -85,7 +37,7 @@ export default function DashboardBreadcrumb() {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link href="/dashboard">Sinar Utama</Link>
+            <Link href="/dashboard">Ottodot Tuition</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         {path.map((segment, index) => {
@@ -97,20 +49,12 @@ export default function DashboardBreadcrumb() {
               <BreadcrumbItem>
                 {isLast ? (
                   <BreadcrumbPage>
-                    <ResolvedBreadcrumbLabel
-                      segment={segment}
-                      path={path}
-                      index={index}
-                    />
+                    <ResolvedBreadcrumbLabel segment={segment} />
                   </BreadcrumbPage>
                 ) : (
                   <BreadcrumbLink asChild>
                     <Link href={href}>
-                      <ResolvedBreadcrumbLabel
-                        segment={segment}
-                        path={path}
-                        index={index}
-                      />
+                      <ResolvedBreadcrumbLabel segment={segment} />
                     </Link>
                   </BreadcrumbLink>
                 )}

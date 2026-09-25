@@ -10,8 +10,6 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { useWebSocket } from '@/lib/hooks/useWebSocket';
 import { WebSocketDebugger } from '@/components/shared/websocket-debugger';
 import { getLocalStorageSettings, isBoolean } from '@/lib/localStorage';
-import { isAuthenticated } from '@/lib/api/isAuthenticated';
-import { useUpdateLiveLogin } from '@/lib/hooks/mutation/user';
 
 function mapServerKeyToQueryKey(serverKey: string): any[][] {
   // If the server key is "outlet", we invalidate both ['outlets'] and ['outlet']
@@ -56,9 +54,6 @@ function WebSocketListener({ children }: { children: ReactNode }) {
   const queryClient = useQueryClient();
   const [messages, setMessages] = useState<string[]>([]);
   const [wsDebuggerEnabled, setWsDebuggerEnabled] = useState(false);
-
-  // Track and send GPS location to backend for all authenticated users
-  useUpdateLiveLogin(isAuthenticated());
 
   useEffect(() => {
     const checkSettings = () => {
