@@ -2,7 +2,14 @@
 
 import React, { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { ottodotApi, TrialClass, Parent, Student, Booking, RosterItem } from '@/lib/ottodot-api';
+import {
+  ottodotApi,
+  TrialClass,
+  Parent,
+  Student,
+  Booking,
+  RosterItem
+} from '@/lib/ottodot-api';
 import { useWebSocket } from '@/lib/useWebSocket';
 import {
   BookOpen,
@@ -12,7 +19,6 @@ import {
   CheckCircle2,
   AlertTriangle,
   Clock,
-  Sparkles,
   Shield,
   Zap,
   LogOut,
@@ -32,7 +38,9 @@ export default function DashboardPage() {
   const [parents, setParents] = useState<Parent[]>([]);
   const [selectedParent, setSelectedParent] = useState<Parent | null>(null);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
-  const [activeTab, setActiveTab] = useState<'classes' | 'payment' | 'bookings' | 'admin'>('classes');
+  const [activeTab, setActiveTab] = useState<
+    'classes' | 'payment' | 'bookings' | 'admin'
+  >('classes');
   const [selectedSubject, setSelectedSubject] = useState<string>('All');
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -41,17 +49,29 @@ export default function DashboardPage() {
   const [userBookings, setUserBookings] = useState<Booking[]>([]);
 
   // Booking Modal
-  const [bookingModalClass, setBookingModalClass] = useState<TrialClass | null>(null);
+  const [bookingModalClass, setBookingModalClass] = useState<TrialClass | null>(
+    null
+  );
   const [bookingLoading, setBookingLoading] = useState<boolean>(false);
   const [bookingError, setBookingError] = useState<string | null>(null);
 
   // Payment Processing state
   const [paymentLoading, setPaymentLoading] = useState<boolean>(false);
-  const [paymentResult, setPaymentResult] = useState<{ success: boolean; message: string; data?: any } | null>(null);
+  const [paymentResult, setPaymentResult] = useState<{
+    success: boolean;
+    message: string;
+    data?: any;
+  } | null>(null);
 
   // Admin Roster state
-  const [selectedRosterClassId, setSelectedRosterClassId] = useState<string>('');
-  const [rosterData, setRosterData] = useState<{ class: TrialClass; roster: RosterItem[]; count: number; capacity: number } | null>(null);
+  const [selectedRosterClassId, setSelectedRosterClassId] =
+    useState<string>('');
+  const [rosterData, setRosterData] = useState<{
+    class: TrialClass;
+    roster: RosterItem[];
+    count: number;
+    capacity: number;
+  } | null>(null);
 
   // Admin Edit Capacity Modal
   const [editClassModal, setEditClassModal] = useState<TrialClass | null>(null);
@@ -114,7 +134,10 @@ export default function DashboardPage() {
         if (event.type === 'SEAT_UPDATE') {
           loadData();
           if (selectedRosterClassId) {
-            ottodotApi.getClassRoster(selectedRosterClassId).then(setRosterData).catch(() => {});
+            ottodotApi
+              .getClassRoster(selectedRosterClassId)
+              .then(setRosterData)
+              .catch(() => {});
           }
         }
       },
@@ -125,7 +148,10 @@ export default function DashboardPage() {
   // Load Admin Roster when selected class changes
   useEffect(() => {
     if (selectedRosterClassId) {
-      ottodotApi.getClassRoster(selectedRosterClassId).then(setRosterData).catch(() => {});
+      ottodotApi
+        .getClassRoster(selectedRosterClassId)
+        .then(setRosterData)
+        .catch(() => {});
     }
   }, [selectedRosterClassId]);
 
@@ -147,7 +173,10 @@ export default function DashboardPage() {
     setBookingError(null);
 
     try {
-      const res = await ottodotApi.createBooking(selectedStudent.id, bookingModalClass.id);
+      const res = await ottodotApi.createBooking(
+        selectedStudent.id,
+        bookingModalClass.id
+      );
       if (res.success) {
         const newBooking = res.data;
         setActiveBooking(newBooking);
@@ -159,7 +188,11 @@ export default function DashboardPage() {
       }
     } catch (err: any) {
       if (err.response?.data) {
-        setBookingError(err.response.data.message || err.response.data.error || 'Booking error');
+        setBookingError(
+          err.response.data.message ||
+            err.response.data.error ||
+            'Booking error'
+        );
       } else {
         setBookingError('Error creating booking');
       }
@@ -174,7 +207,11 @@ export default function DashboardPage() {
     setPaymentLoading(true);
     setPaymentResult(null);
 
-    const res = await ottodotApi.processPayment(activeBooking.id, activeBooking.payment_token, outcome);
+    const res = await ottodotApi.processPayment(
+      activeBooking.id,
+      activeBooking.payment_token,
+      outcome
+    );
     setPaymentLoading(false);
 
     if (res.success && res.data.success) {
@@ -183,14 +220,21 @@ export default function DashboardPage() {
         message: 'Booking Confirmed! Student added to trial class roster.',
         data: res.data.data
       });
-      setActiveBooking((prev) => (prev ? { ...prev, status: 'confirmed' } : null));
+      setActiveBooking((prev) =>
+        prev ? { ...prev, status: 'confirmed' } : null
+      );
     } else {
       setPaymentResult({
         success: false,
-        message: res.data?.message || res.data?.error || 'Payment failed or seat no longer available',
+        message:
+          res.data?.message ||
+          res.data?.error ||
+          'Payment failed or seat no longer available',
         data: res.data?.data
       });
-      setActiveBooking((prev) => (prev ? { ...prev, status: 'payment_failed' } : null));
+      setActiveBooking((prev) =>
+        prev ? { ...prev, status: 'payment_failed' } : null
+      );
     }
     loadData();
   };
@@ -199,7 +243,8 @@ export default function DashboardPage() {
   const handleSimulateLastSeatRace = async () => {
     if (!selectedStudent || classes.length === 0) return;
 
-    const classForRace = classes.find((c) => c.capacity - c.enrolled_count === 1) || classes[0];
+    const classForRace =
+      classes.find((c) => c.capacity - c.enrolled_count === 1) || classes[0];
 
     setPaymentLoading(true);
     setPaymentResult(null);
@@ -209,7 +254,10 @@ export default function DashboardPage() {
       const p2Students = parents[1]?.students || [];
 
       if (p1Students.length === 0 || p2Students.length === 0) {
-        setPaymentResult({ success: false, message: 'Need at least 2 demo students to simulate race' });
+        setPaymentResult({
+          success: false,
+          message: 'Need at least 2 demo students to simulate race'
+        });
         setPaymentLoading(false);
         return;
       }
@@ -220,7 +268,10 @@ export default function DashboardPage() {
       ]);
 
       if (!b1Res.success || !b2Res.success) {
-        setPaymentResult({ success: false, message: 'Race setup failed (duplicate booking or class already full)' });
+        setPaymentResult({
+          success: false,
+          message: 'Race setup failed (duplicate booking or class already full)'
+        });
         setPaymentLoading(false);
         return;
       }
@@ -230,11 +281,22 @@ export default function DashboardPage() {
 
       // Execute SIMULTANEOUS payment submissions via Promise.all
       const [pay1, pay2] = await Promise.all([
-        ottodotApi.processPayment(booking1.id, booking1.payment_token, 'success'),
-        ottodotApi.processPayment(booking2.id, booking2.payment_token, 'success')
+        ottodotApi.processPayment(
+          booking1.id,
+          booking1.payment_token,
+          'success'
+        ),
+        ottodotApi.processPayment(
+          booking2.id,
+          booking2.payment_token,
+          'success'
+        )
       ]);
 
-      const successCount = [pay1.success && pay1.data.success, pay2.success && pay2.data.success].filter(Boolean).length;
+      const successCount = [
+        pay1.success && pay1.data.success,
+        pay2.success && pay2.data.success
+      ].filter(Boolean).length;
 
       setPaymentResult({
         success: true,
@@ -243,7 +305,10 @@ export default function DashboardPage() {
 
       loadData();
     } catch (err: any) {
-      setPaymentResult({ success: false, message: 'Race test error: ' + err.message });
+      setPaymentResult({
+        success: false,
+        message: 'Race test error: ' + err.message
+      });
     } finally {
       setPaymentLoading(false);
     }
@@ -277,7 +342,9 @@ export default function DashboardPage() {
   };
 
   const filteredClasses = classes.filter(
-    (c) => selectedSubject === 'All' || c.subject.toLowerCase() === selectedSubject.toLowerCase()
+    (c) =>
+      selectedSubject === 'All' ||
+      c.subject.toLowerCase() === selectedSubject.toLowerCase()
   );
 
   return (
@@ -290,7 +357,9 @@ export default function DashboardPage() {
               <BookOpen className="w-5 h-5" />
             </div>
             <div>
-              <span className="font-serif font-bold text-[#15172B] text-xl tracking-tight">Ottodot</span>
+              <span className="font-serif font-bold text-[#15172B] text-xl tracking-tight">
+                Ottodot
+              </span>
               <span className="text-xs text-[#E73449] font-bold ml-2 px-2 py-0.5 bg-[#FFF6E5] border border-[#EDE7DC] rounded-sm uppercase tracking-wider">
                 Tuition Portal
               </span>
@@ -306,13 +375,19 @@ export default function DashboardPage() {
                 <select
                   value={selectedParent?.id || ''}
                   onChange={(e) => {
-                    const p = parents.find((item) => item.id === e.target.value);
+                    const p = parents.find(
+                      (item) => item.id === e.target.value
+                    );
                     if (p) handleParentSelect(p);
                   }}
                   className="bg-transparent font-bold text-[#15172B] focus:outline-none cursor-pointer"
                 >
                   {parents.map((p) => (
-                    <option key={p.id} value={p.id} className="bg-white text-[#15172B]">
+                    <option
+                      key={p.id}
+                      value={p.id}
+                      className="bg-white text-[#15172B]"
+                    >
                       {p.name} ({p.students.length} kids)
                     </option>
                   ))}
@@ -372,7 +447,9 @@ export default function DashboardPage() {
               <div>
                 <h3 className="text-sm font-bold text-[#15172B] flex items-center gap-2">
                   {selectedParent.name}
-                  <span className="text-xs font-normal text-[#555770]">({selectedParent.email})</span>
+                  <span className="text-xs font-normal text-[#555770]">
+                    ({selectedParent.email})
+                  </span>
                 </h3>
                 <p className="text-xs text-[#3F4159]">
                   Select active child for booking trial class:
@@ -462,8 +539,13 @@ export default function DashboardPage() {
           <div>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
               <div>
-                <h2 className="font-serif text-2xl font-bold text-[#15172B] tracking-tight">Available Trial Classes</h2>
-                <p className="text-xs text-[#555770]">Live seat counts update automatically in real-time via WebSocket</p>
+                <h2 className="font-serif text-2xl font-bold text-[#15172B] tracking-tight">
+                  Available Trial Classes
+                </h2>
+                <p className="text-xs text-[#555770]">
+                  Live seat counts update automatically in real-time via
+                  WebSocket
+                </p>
               </div>
 
               {/* Subject Filter */}
@@ -514,11 +596,15 @@ export default function DashboardPage() {
                               isFull
                                 ? 'bg-[#E73449] text-white border-[#C72236]'
                                 : isOneLeft
-                                ? 'bg-[#FBAE24] text-[#15172B] border-[#E69612] animate-pulse'
-                                : 'bg-[#83C341] text-white border-[#6BA62F]'
+                                  ? 'bg-[#FBAE24] text-[#15172B] border-[#E69612] animate-pulse'
+                                  : 'bg-[#83C341] text-white border-[#6BA62F]'
                             }`}
                           >
-                            {isFull ? 'FULL (0 seats)' : isOneLeft ? 'LAST SEAT LEFT!' : `${remaining} Seats Available`}
+                            {isFull
+                              ? 'FULL (0 seats)'
+                              : isOneLeft
+                                ? 'LAST SEAT LEFT!'
+                                : `${remaining} Seats Available`}
                           </span>
                         </div>
 
@@ -533,7 +619,11 @@ export default function DashboardPage() {
                           </div>
                           <div className="flex items-center gap-2">
                             <Users className="w-3.5 h-3.5 text-[#555770]" />
-                            Capacity: <strong className="text-[#15172B]">{cls.enrolled_count} / {cls.capacity}</strong> confirmed
+                            Capacity:{' '}
+                            <strong className="text-[#15172B]">
+                              {cls.enrolled_count} / {cls.capacity}
+                            </strong>{' '}
+                            confirmed
                           </div>
                         </div>
                       </div>
@@ -570,18 +660,35 @@ export default function DashboardPage() {
                   <CreditCard className="w-6 h-6" />
                 </div>
                 <div>
-                  <h2 className="font-serif text-xl font-bold text-[#15172B]">Mock Payment Simulation</h2>
-                  <p className="text-xs text-[#555770]">Test deterministic payment outcomes and PostgreSQL row-locking concurrency protection</p>
+                  <h2 className="font-serif text-xl font-bold text-[#15172B]">
+                    Mock Payment Simulation
+                  </h2>
+                  <p className="text-xs text-[#555770]">
+                    Test deterministic payment outcomes and PostgreSQL
+                    row-locking concurrency protection
+                  </p>
                 </div>
               </div>
 
               {activeBooking ? (
                 <div className="space-y-6">
                   <div className="bg-[#FFF6E5] border border-[#EDE7DC] p-4 rounded-sm space-y-2">
-                    <div className="text-xs font-bold uppercase tracking-wider text-[#E73449]">Active Pending Booking</div>
-                    <div className="font-serif text-lg font-bold text-[#15172B]">{activeBooking.trial_class?.title || 'Trial Class Session'}</div>
-                    <div className="text-xs text-[#3F4159]">Student: <strong className="text-[#15172B]">{activeBooking.student?.name}</strong></div>
-                    <div className="text-[11px] font-mono text-[#555770]">Payment Token: {activeBooking.payment_token}</div>
+                    <div className="text-xs font-bold uppercase tracking-wider text-[#E73449]">
+                      Active Pending Booking
+                    </div>
+                    <div className="font-serif text-lg font-bold text-[#15172B]">
+                      {activeBooking.trial_class?.title ||
+                        'Trial Class Session'}
+                    </div>
+                    <div className="text-xs text-[#3F4159]">
+                      Student:{' '}
+                      <strong className="text-[#15172B]">
+                        {activeBooking.student?.name}
+                      </strong>
+                    </div>
+                    <div className="text-[11px] font-mono text-[#555770]">
+                      Payment Token: {activeBooking.payment_token}
+                    </div>
                     <div className="text-[11px] text-[#555770] flex items-center gap-2">
                       Status:
                       <span className="px-2 py-0.5 bg-[#FBAE24] text-[#15172B] rounded-sm font-bold">
@@ -605,7 +712,11 @@ export default function DashboardPage() {
                         ) : (
                           <AlertTriangle className="w-4 h-4 text-[#E73449]" />
                         )}
-                        <span className="font-bold">{paymentResult.success ? 'Transaction Result' : 'Transaction Failed'}</span>
+                        <span className="font-bold">
+                          {paymentResult.success
+                            ? 'Transaction Result'
+                            : 'Transaction Failed'}
+                        </span>
                       </div>
                       <p>{paymentResult.message}</p>
                     </div>
@@ -613,16 +724,22 @@ export default function DashboardPage() {
 
                   <div className="space-y-3">
                     <button
-                      disabled={paymentLoading || activeBooking.status === 'confirmed'}
+                      disabled={
+                        paymentLoading || activeBooking.status === 'confirmed'
+                      }
                       onClick={() => handleProcessPayment('success')}
                       className="w-full py-3 px-4 bg-[#83C341] hover:bg-[#6BA62F] text-white rounded-sm font-bold text-xs uppercase tracking-wider cursor-pointer disabled:opacity-50 transition-all flex items-center justify-center gap-2 shadow-[0_6px_0_-2px_rgba(131,195,65,0.35)]"
                     >
                       <CheckCircle2 className="w-4 h-4" />
-                      {paymentLoading ? 'Processing Payment...' : 'Simulate Successful Payment'}
+                      {paymentLoading
+                        ? 'Processing Payment...'
+                        : 'Simulate Successful Payment'}
                     </button>
 
                     <button
-                      disabled={paymentLoading || activeBooking.status === 'confirmed'}
+                      disabled={
+                        paymentLoading || activeBooking.status === 'confirmed'
+                      }
                       onClick={() => handleProcessPayment('fail_payment')}
                       className="w-full py-3 px-4 bg-white hover:bg-[#FFF6E5] border border-[#E73449] text-[#C72236] rounded-sm font-bold text-xs uppercase tracking-wider cursor-pointer disabled:opacity-50 transition-all flex items-center justify-center gap-2"
                     >
@@ -633,7 +750,10 @@ export default function DashboardPage() {
                 </div>
               ) : (
                 <div className="text-center py-8">
-                  <p className="text-xs text-[#555770] mb-4">No active pending booking. Pick a trial class from the catalog first!</p>
+                  <p className="text-xs text-[#555770] mb-4">
+                    No active pending booking. Pick a trial class from the
+                    catalog first!
+                  </p>
                   <button
                     onClick={() => setActiveTab('classes')}
                     className="px-4 py-2.5 bg-[#E73449] hover:bg-[#C72236] text-white rounded-sm text-xs font-bold cursor-pointer transition-colors shadow-[0_6px_0_-2px_rgba(231,52,73,0.35)]"
@@ -650,7 +770,9 @@ export default function DashboardPage() {
                   Last-Seat Concurrency Race Tester
                 </div>
                 <p className="text-xs text-[#555770] mb-4">
-                  Triggers 2 simultaneous payment requests for the last seat to verify PostgreSQL pessimistic lock (`SELECT ... FOR UPDATE`) protection.
+                  Triggers 2 simultaneous payment requests for the last seat to
+                  verify PostgreSQL pessimistic lock (`SELECT ... FOR UPDATE`)
+                  protection.
                 </p>
                 <button
                   disabled={paymentLoading}
@@ -668,19 +790,34 @@ export default function DashboardPage() {
         {/* TAB 3: BOOKING STATUS VIEW */}
         {activeTab === 'bookings' && (
           <div className="max-w-4xl mx-auto">
-            <h2 className="font-serif text-2xl font-bold text-[#15172B] mb-6">Submitted Booking Records</h2>
+            <h2 className="font-serif text-2xl font-bold text-[#15172B] mb-6">
+              Submitted Booking Records
+            </h2>
             {userBookings.length === 0 ? (
               <div className="bg-white border border-[#EDE7DC] p-8 rounded-sm text-center text-[#555770] text-xs shadow-sm">
-                No bookings submitted in this session yet. Pick a class and complete payment to view records.
+                No bookings submitted in this session yet. Pick a class and
+                complete payment to view records.
               </div>
             ) : (
               <div className="space-y-4">
                 {userBookings.map((b) => (
-                  <div key={b.id} className="bg-white border border-[#EDE7DC] p-5 rounded-sm flex items-center justify-between shadow-sm">
+                  <div
+                    key={b.id}
+                    className="bg-white border border-[#EDE7DC] p-5 rounded-sm flex items-center justify-between shadow-sm"
+                  >
                     <div>
-                      <div className="font-serif text-lg font-bold text-[#15172B] mb-1">{b.trial_class?.title || 'Trial Class Session'}</div>
-                      <div className="text-xs text-[#3F4159]">Student: <strong className="text-[#15172B]">{b.student?.name}</strong></div>
-                      <div className="text-[11px] font-mono text-[#555770]">Payment Token: {b.payment_token}</div>
+                      <div className="font-serif text-lg font-bold text-[#15172B] mb-1">
+                        {b.trial_class?.title || 'Trial Class Session'}
+                      </div>
+                      <div className="text-xs text-[#3F4159]">
+                        Student:{' '}
+                        <strong className="text-[#15172B]">
+                          {b.student?.name}
+                        </strong>
+                      </div>
+                      <div className="text-[11px] font-mono text-[#555770]">
+                        Payment Token: {b.payment_token}
+                      </div>
                     </div>
                     <div>
                       <span
@@ -688,8 +825,8 @@ export default function DashboardPage() {
                           b.status === 'confirmed'
                             ? 'bg-[#83C341] text-white border-[#6BA62F]'
                             : b.status === 'pending_payment'
-                            ? 'bg-[#FBAE24] text-[#15172B] border-[#E69612]'
-                            : 'bg-[#E73449] text-white border-[#C72236]'
+                              ? 'bg-[#FBAE24] text-[#15172B] border-[#E69612]'
+                              : 'bg-[#E73449] text-white border-[#C72236]'
                         }`}
                       >
                         {b.status}
@@ -707,13 +844,20 @@ export default function DashboardPage() {
           <div>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
               <div>
-                <h2 className="font-serif text-2xl font-bold text-[#15172B]">Teacher Roster &amp; Dynamic Capacity</h2>
-                <p className="text-xs text-[#555770]">View real-time confirmed rosters and edit dynamic student capacity limits</p>
+                <h2 className="font-serif text-2xl font-bold text-[#15172B]">
+                  Teacher Roster &amp; Dynamic Capacity
+                </h2>
+                <p className="text-xs text-[#555770]">
+                  View real-time confirmed rosters and edit dynamic student
+                  capacity limits
+                </p>
               </div>
 
               {/* Class Selector */}
               <div className="flex items-center gap-2">
-                <label className="text-xs font-semibold text-[#555770]">Select Class:</label>
+                <label className="text-xs font-semibold text-[#555770]">
+                  Select Class:
+                </label>
                 <select
                   value={selectedRosterClassId}
                   onChange={(e) => setSelectedRosterClassId(e.target.value)}
@@ -732,9 +876,15 @@ export default function DashboardPage() {
               <div className="bg-white border border-[#EDE7DC] rounded-sm p-6 shadow-sm">
                 <div className="flex items-center justify-between pb-4 border-b border-[#EDE7DC] mb-6">
                   <div>
-                    <h3 className="font-serif text-xl font-bold text-[#15172B]">{rosterData.class.title}</h3>
+                    <h3 className="font-serif text-xl font-bold text-[#15172B]">
+                      {rosterData.class.title}
+                    </h3>
                     <p className="text-xs text-[#555770]">
-                      Confirmed Enrollment: <strong className="text-[#15172B]">{rosterData.count} / {rosterData.capacity}</strong> Students
+                      Confirmed Enrollment:{' '}
+                      <strong className="text-[#15172B]">
+                        {rosterData.count} / {rosterData.capacity}
+                      </strong>{' '}
+                      Students
                     </p>
                   </div>
 
@@ -767,20 +917,34 @@ export default function DashboardPage() {
                     <tbody className="divide-y divide-[#EDE7DC]">
                       {rosterData.roster.length === 0 ? (
                         <tr>
-                          <td colSpan={6} className="px-4 py-6 text-center text-[#555770]">
-                            No confirmed students in this trial class roster yet.
+                          <td
+                            colSpan={6}
+                            className="px-4 py-6 text-center text-[#555770]"
+                          >
+                            No confirmed students in this trial class roster
+                            yet.
                           </td>
                         </tr>
                       ) : (
                         rosterData.roster.map((item, idx) => (
                           <tr key={item.id} className="hover:bg-[#FFF6E5]/50">
-                            <td className="px-4 py-3 text-[#555770] font-mono">{idx + 1}</td>
-                            <td className="px-4 py-3 font-bold text-[#15172B]">{item.student?.name}</td>
-                            <td className="px-4 py-3">{item.student?.age} y.o</td>
-                            <td className="px-4 py-3 text-[#E73449] font-semibold">{item.student?.parent?.name}</td>
+                            <td className="px-4 py-3 text-[#555770] font-mono">
+                              {idx + 1}
+                            </td>
+                            <td className="px-4 py-3 font-bold text-[#15172B]">
+                              {item.student?.name}
+                            </td>
+                            <td className="px-4 py-3">
+                              {item.student?.age} y.o
+                            </td>
+                            <td className="px-4 py-3 text-[#E73449] font-semibold">
+                              {item.student?.parent?.name}
+                            </td>
                             <td className="px-4 py-3 text-[#3F4159]">
                               {item.student?.parent?.email} <br />
-                              <span className="text-[11px] text-[#555770]">{item.student?.parent?.phone}</span>
+                              <span className="text-[11px] text-[#555770]">
+                                {item.student?.parent?.phone}
+                              </span>
                             </td>
                             <td className="px-4 py-3">
                               <span className="px-2 py-0.5 bg-[#83C341] text-white font-bold rounded-sm text-[10px]">
@@ -804,7 +968,9 @@ export default function DashboardPage() {
         <div className="fixed inset-0 bg-[#15172B]/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white border border-[#EDE7DC] rounded-sm max-w-md w-full p-6 shadow-2xl">
             <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#EDE7DC]">
-              <h3 className="font-serif text-lg font-bold text-[#15172B]">Book Trial Class</h3>
+              <h3 className="font-serif text-lg font-bold text-[#15172B]">
+                Book Trial Class
+              </h3>
               <button
                 onClick={() => setBookingModalClass(null)}
                 className="text-[#555770] hover:text-[#E73449] cursor-pointer"
@@ -821,13 +987,21 @@ export default function DashboardPage() {
 
             <div className="space-y-4 text-xs mb-6">
               <div className="bg-[#FFF6E5] p-3 rounded-sm border border-[#EDE7DC]">
-                <div className="font-serif font-bold text-[#15172B] text-base">{bookingModalClass.title}</div>
-                <div className="text-[#E73449] font-bold">{bookingModalClass.subject}</div>
-                <div className="text-[#555770] mt-1">{new Date(bookingModalClass.start_time).toLocaleString()}</div>
+                <div className="font-serif font-bold text-[#15172B] text-base">
+                  {bookingModalClass.title}
+                </div>
+                <div className="text-[#E73449] font-bold">
+                  {bookingModalClass.subject}
+                </div>
+                <div className="text-[#555770] mt-1">
+                  {new Date(bookingModalClass.start_time).toLocaleString()}
+                </div>
               </div>
 
               <div>
-                <label className="block text-[#555770] font-semibold mb-1">Confirm Selected Student:</label>
+                <label className="block text-[#555770] font-semibold mb-1">
+                  Confirm Selected Student:
+                </label>
                 <div className="p-3 bg-white border border-[#EDE7DC] text-[#15172B] font-bold rounded-sm flex items-center gap-2">
                   <User className="w-4 h-4 text-[#E73449]" />
                   {selectedStudent?.name} ({selectedStudent?.age} years old)
@@ -863,14 +1037,19 @@ export default function DashboardPage() {
                 <Edit2 className="w-4 h-4 text-[#E73449]" />
                 Edit Dynamic Student Limit
               </h3>
-              <button onClick={() => setEditClassModal(null)} className="text-[#555770] hover:text-[#E73449] cursor-pointer">
+              <button
+                onClick={() => setEditClassModal(null)}
+                className="text-[#555770] hover:text-[#E73449] cursor-pointer"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <form onSubmit={handleUpdateCapacitySubmit} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-[#15172B] mb-1">Class Title</label>
+                <label className="block text-xs font-bold text-[#15172B] mb-1">
+                  Class Title
+                </label>
                 <input
                   type="text"
                   value={editTitle}
@@ -880,7 +1059,9 @@ export default function DashboardPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#15172B] mb-1">Subject</label>
+                <label className="block text-xs font-bold text-[#15172B] mb-1">
+                  Subject
+                </label>
                 <select
                   value={editSubject}
                   onChange={(e) => setEditSubject(e.target.value)}
@@ -901,11 +1082,14 @@ export default function DashboardPage() {
                   min="1"
                   max="50"
                   value={editCapacity}
-                  onChange={(e) => setEditCapacity(parseInt(e.target.value) || 1)}
+                  onChange={(e) =>
+                    setEditCapacity(parseInt(e.target.value) || 1)
+                  }
                   className="w-full bg-white border border-[#EDE7DC] p-2.5 text-xs text-[#15172B] rounded-sm font-bold focus:outline-none focus:border-[#E73449]"
                 />
                 <p className="text-[11px] text-[#555770] mt-1">
-                  Current Enrolled: {editClassModal.enrolled_count}. New limit cannot be set below currently enrolled count.
+                  Current Enrolled: {editClassModal.enrolled_count}. New limit
+                  cannot be set below currently enrolled count.
                 </p>
               </div>
 

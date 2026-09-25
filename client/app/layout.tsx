@@ -6,8 +6,10 @@ import { Suspense } from 'react';
 
 export const metadata = {
   title: 'Primary Math & Science Tuition Singapore | Ottodot',
-  description: 'Primary Math and Science tuition blended with interactive Roblox gameplay — for deeper, more memorable learning that sticks.',
-  keywords: 'Ottodot, Math Tuition Singapore, Science Tuition Singapore, Roblox Learning, Primary School Tuition',
+  description:
+    'Primary Math and Science tuition blended with interactive Roblox gameplay — for deeper, more memorable learning that sticks.',
+  keywords:
+    'Ottodot, Math Tuition Singapore, Science Tuition Singapore, Roblox Learning, Primary School Tuition',
   authors: [
     {
       name: 'Ottodot Education',
@@ -20,13 +22,12 @@ export const metadata = {
     nocache: false
   },
   icons: {
-    icon: [
-      { url: '/favicon.ico' }
-    ]
+    icon: [{ url: '/favicon.ico' }]
   },
   openGraph: {
     title: 'Primary Math & Science Tuition Singapore | Ottodot',
-    description: 'Primary Math and Science tuition blended with interactive Roblox gameplay — for deeper, more memorable learning that sticks.',
+    description:
+      'Primary Math and Science tuition blended with interactive Roblox gameplay — for deeper, more memorable learning that sticks.',
     url: process.env.NEXT_PUBLIC_CLIENT_URL || 'https://www.ottodot.com',
     siteName: 'Ottodot',
     type: 'website'
@@ -34,9 +35,12 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Primary Math & Science Tuition Singapore | Ottodot',
-    description: 'Primary Math and Science tuition blended with interactive Roblox gameplay — for deeper, more memorable learning that sticks.'
+    description:
+      'Primary Math and Science tuition blended with interactive Roblox gameplay — for deeper, more memorable learning that sticks.'
   },
-  metadataBase: new URL(process.env.NEXT_PUBLIC_CLIENT_URL || 'https://www.ottodot.com')
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_CLIENT_URL || 'https://www.ottodot.com'
+  )
 };
 
 export const viewport = {

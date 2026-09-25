@@ -6,24 +6,26 @@
 
 @layer base {
   :root {
-    --coral: #E73449;
-    --coral-deep: #C72236;
-    --mustard: #FBAE24;
-    --mustard-deep: #E69612;
-    --mint: #83C341;
-    --mint-deep: #6BA62F;
-    --sky: #6ACCE1;
-    --sky-deep: #4FB5CD;
-    --ink: #15172B;
-    --ink-2: #3F4159;
+    --coral: #e73449;
+    --coral-deep: #c72236;
+    --mustard: #fbae24;
+    --mustard-deep: #e69612;
+    --mint: #83c341;
+    --mint-deep: #6ba62f;
+    --sky: #6acce1;
+    --sky-deep: #4fb5cd;
+    --ink: #15172b;
+    --ink-2: #3f4159;
     --muted: #555770;
-    --line: #EDE7DC;
-    --cream: #FFF6E5;
-    --paper: #FFFFFF;
-    --white: #FFFFFF;
-    --shadow-sm: 0 1px 0 rgba(21,23,43,.04), 0 4px 14px -6px rgba(21,23,43,.08);
-    --shadow: 0 2px 0 rgba(21,23,43,.05), 0 24px 50px -22px rgba(21,23,43,.18);
-    --shadow-lg: 0 30px 80px -30px rgba(21,23,43,.28);
+    --line: #ede7dc;
+    --cream: #fff6e5;
+    --paper: #ffffff;
+    --white: #ffffff;
+    --shadow-sm:
+      0 1px 0 rgba(21, 23, 43, 0.04), 0 4px 14px -6px rgba(21, 23, 43, 0.08);
+    --shadow:
+      0 2px 0 rgba(21, 23, 43, 0.05), 0 24px 50px -22px rgba(21, 23, 43, 0.18);
+    --shadow-lg: 0 30px 80px -30px rgba(21, 23, 43, 0.28);
     --radius: 18px;
     --radius-lg: 28px;
 
@@ -57,15 +59,6 @@
 
     --radius: 0.125rem; /* rounded-sm */
   }
-}
-
-.font-serif, .serif {
-  font-family: 'Fraunces', Georgia, serif;
-}
-
-.font-sans {
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-}
 
   .dark {
     --background: 222.2 84% 4.9%;
@@ -96,15 +89,26 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.font-serif,
+.serif {
+  font-family: 'Fraunces', Georgia, serif;
+}
+
+.font-sans {
+  font-family:
+    'Plus Jakarta Sans',
+    system-ui,
+    -apple-system,
+    sans-serif;
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -220,172 +224,4 @@ input[type='number'] {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
-}
-
-@media print {
-  @page {
-    size: A4 portrait;
-    margin: 4mm 5mm;
-  }
-
-  html,
-  body {
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    overflow: visible !important;
-    background-color: white !important;
-    color: black !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-
-  /* Hide Radix Dialog Overlay backdrops and non-print overlays */
-  [class*='DialogOverlay'],
-  div[data-state='open'][class*='fixed inset-0'] {
-    background: transparent !important;
-    display: none !important;
-  }
-
-  [data-radix-portal] {
-    display: block !important;
-    position: static !important;
-    overflow: visible !important;
-    height: auto !important;
-    min-height: 0 !important;
-  }
-
-  [role='dialog'] {
-    position: absolute !important;
-    transform: none !important;
-    top: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    height: auto !important;
-    max-height: none !important;
-    overflow: visible !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    background: transparent !important;
-    box-shadow: none !important;
-    border: none !important;
-    visibility: visible !important;
-  }
-
-  /* Hide non-print main layout elements so they take 0 layout space */
-  header,
-  sidebar,
-  nav,
-  aside,
-  footer,
-  .no-print {
-    display: none !important;
-  }
-
-  /* 1. Hide everything on screen by default */
-  body * {
-    visibility: hidden;
-  }
-
-  /* 2. Show only the print-only container and its child elements */
-  .print-only,
-  .print-only * {
-    visibility: visible !important;
-  }
-
-  /* 3. Position the print-only element absolute at top-left */
-  .print-only {
-    position: absolute !important;
-    left: 0 !important;
-    top: 0 !important;
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    box-sizing: border-box !important;
-    display: block !important;
-    background-color: white !important;
-    color: black !important;
-    z-index: 99999 !important;
-    page-break-after: avoid !important;
-    break-after: avoid !important;
-  }
-
-  .print-page-break {
-    page-break-after: always;
-  }
-
-  /* Enterprise Document Header */
-  .doc-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    border-bottom: 2px solid #000;
-    padding-bottom: 1.5rem;
-    margin-bottom: 2rem;
-  }
-
-  .doc-logo {
-    font-size: 2rem;
-    font-weight: 900;
-    letter-spacing: -0.05em;
-    text-transform: uppercase;
-  }
-
-  /* Standard Print Table */
-  .print-table {
-    width: 100% !important;
-    border-collapse: collapse !important;
-    margin: 1.5rem 0 !important;
-  }
-
-  .print-table th {
-    background-color: #f1f5f9 !important;
-    border: 1px solid #000 !important;
-    padding: 10px !important;
-    font-size: 0.75rem !important;
-    font-weight: 500 !important;
-    text-transform: uppercase !important;
-    -webkit-print-color-adjust: exact;
-  }
-
-  .print-table td {
-    border: 1px solid #000 !important;
-    padding: 8px !important;
-    font-size: 0.875rem !important;
-  }
-
-  /* Signature Block */
-  .signature-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2rem;
-    margin-top: 6rem;
-  }
-
-  .sig-box {
-    text-align: center;
-    border-top: 1px solid #000;
-    padding-top: 0.5rem;
-    font-size: 0.75rem;
-    font-weight: 400;
-    text-transform: uppercase;
-  }
-
-  /* Fixed Print Footer Stick To Bottom */
-  .po-print-footer {
-    position: fixed !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    width: 100% !important;
-    background-color: #ffffff !important;
-    padding-top: 6px !important;
-    padding-bottom: 2px !important;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-}
-
-.print-only {
-  display: none;
 }

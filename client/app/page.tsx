@@ -3,7 +3,15 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ottodotApi } from '@/lib/ottodot-api';
-import { LogIn, User, Shield, Sparkles, BookOpen, CheckCircle2, Lock } from 'lucide-react';
+import {
+  LogIn,
+  User,
+  Shield,
+  Sparkles,
+  BookOpen,
+  CheckCircle2,
+  Lock
+} from 'lucide-react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -27,7 +35,9 @@ export default function LoginPage() {
         setError(res.error || 'Login failed');
       }
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Invalid credentials or server unavailable');
+      setError(
+        err.response?.data?.error || 'Invalid credentials or server unavailable'
+      );
     } finally {
       setLoading(false);
     }
@@ -59,14 +69,18 @@ export default function LoginPage() {
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center relative z-10">
         <div className="inline-flex items-center gap-2 bg-white border border-[#EDE7DC] px-4 py-2 rounded-sm shadow-sm mb-4">
+          <BookOpen className="w-4 h-4 text-[#E73449]" />
           <span className="bg-[#E73449] text-white px-2 py-0.5 rounded-sm text-xs font-bold uppercase tracking-wide">
             Trial Booking Engine
           </span>
-          <span className="text-xs font-semibold text-[#3F4159]">Ottodot Tuition Singapore</span>
+          <span className="text-xs font-semibold text-[#3F4159]">
+            Ottodot Tuition Singapore
+          </span>
         </div>
 
         <h1 className="font-serif text-3xl sm:text-4xl font-extrabold text-[#15172B] tracking-tight">
-          Ottodot <span className="italic text-[#E73449]">Tuition</span> Platform
+          Ottodot <span className="italic text-[#E73449]">Tuition</span>{' '}
+          Platform
         </h1>
         <p className="mt-2 text-sm text-[#3F4159]">
           Primary Math &amp; Science Tuition blended with Roblox gameplay
@@ -145,35 +159,57 @@ export default function LoginPage() {
             <div className="space-y-2">
               <button
                 type="button"
-                onClick={() => quickLogin('parent1@byteseeker.net', 'parent', 'Ikhsan Parent')}
+                onClick={() =>
+                  quickLogin(
+                    'parent1@byteseeker.net',
+                    'parent',
+                    'Ikhsan Parent'
+                  )
+                }
                 className="w-full flex items-center justify-between p-3 bg-[#FFF6E5] hover:bg-[#FFECC9] border border-[#EDE7DC] rounded-sm text-left transition-colors cursor-pointer group"
               >
                 <div>
                   <div className="text-xs font-bold text-[#15172B] group-hover:text-[#E73449]">
                     Parent 1: Ikhsan Parent
                   </div>
-                  <div className="text-[11px] text-[#555770]">2 Children: Leo (8y), Maya (10y)</div>
+                  <div className="text-[11px] text-[#555770]">
+                    2 Children: Leo (8y), Maya (10y)
+                  </div>
                 </div>
                 <CheckCircle2 className="w-4 h-4 text-[#83C341] group-hover:text-[#E73449]" />
               </button>
 
               <button
                 type="button"
-                onClick={() => quickLogin('parent2@byteseeker.net', 'parent', 'Sarah Jenkins')}
+                onClick={() =>
+                  quickLogin(
+                    'parent2@byteseeker.net',
+                    'parent',
+                    'Sarah Jenkins'
+                  )
+                }
                 className="w-full flex items-center justify-between p-3 bg-[#FFF6E5] hover:bg-[#FFECC9] border border-[#EDE7DC] rounded-sm text-left transition-colors cursor-pointer group"
               >
                 <div>
                   <div className="text-xs font-bold text-[#15172B] group-hover:text-[#E73449]">
                     Parent 2: Sarah Jenkins
                   </div>
-                  <div className="text-[11px] text-[#555770]">1 Child: Ethan (7y)</div>
+                  <div className="text-[11px] text-[#555770]">
+                    1 Child: Ethan (7y)
+                  </div>
                 </div>
                 <CheckCircle2 className="w-4 h-4 text-[#83C341] group-hover:text-[#E73449]" />
               </button>
 
               <button
                 type="button"
-                onClick={() => quickLogin('admin@ottodot.net', 'admin', 'Ottodot Teacher Admin')}
+                onClick={() =>
+                  quickLogin(
+                    'admin@ottodot.net',
+                    'admin',
+                    'Ottodot Teacher Admin'
+                  )
+                }
                 className="w-full flex items-center justify-between p-3 bg-white hover:bg-[#FFF6E5] border border-[#EDE7DC] rounded-sm text-left transition-colors cursor-pointer group"
               >
                 <div>
@@ -181,7 +217,9 @@ export default function LoginPage() {
                     <Shield className="w-3.5 h-3.5 text-[#E73449]" />
                     Teacher / Admin Mode
                   </div>
-                  <div className="text-[11px] text-[#555770]">View Live Roster &amp; Dynamic Seat Limits</div>
+                  <div className="text-[11px] text-[#555770]">
+                    View Live Roster &amp; Dynamic Seat Limits
+                  </div>
                 </div>
                 <CheckCircle2 className="w-4 h-4 text-[#6ACCE1]" />
               </button>
