@@ -76,6 +76,7 @@
 - **2026-09-25**: Adjusted Teacher Admin table column layout in [`dashboard/page.tsx`](file:///c:/Project/Web/Ottodot%20Full-Stack%20Engineer%20Take-Home/client/app/dashboard/page.tsx), widening the **Class Title** column (`size: 400`, `minSize: 320`) and narrowing the **Actions** column (`actionsColumnSize: 150`) for cleaner visual balance.
 - **2026-09-25**: Added Filter Controls bar above **All Trial Classes & Capacity Limits** table in [`dashboard/page.tsx`](file:///c:/Project/Web/Ottodot%20Full-Stack%20Engineer%20Take-Home/client/app/dashboard/page.tsx), supporting filtering by **Subject** (Science, Math, Coding, All) and **Capacity Status** (Available Seats, Full Capacity, Empty, All).
 - **2026-09-25**: Added green Realtime WebSocket Connection Status indicator badges across the UI ([useWebSocket.ts](file:///c:/Project/Web/Ottodot%20Full-Stack%20Engineer%20Take-Home/client/lib/useWebSocket.ts), [dashboard/page.tsx](file:///c:/Project/Web/Ottodot%20Full-Stack%20Engineer%20Take-Home/client/app/dashboard/page.tsx)) featuring pulsating emerald green dot indicators and active status text (`Realtime Connected` / `WebSocket Realtime Sync Active`).
+- **2026-09-25**: Refactored WebSocket status badge into a reusable UI component [`RealtimeStatusBadge`](file:///c:/Project/Web/Ottodot%20Full-Stack%20Engineer%20Take-Home/client/components/ui/realtime-status-badge.tsx) adhering to DRY and Single Responsibility principles. Integrated across sticky header and section headings.
 
 
 
