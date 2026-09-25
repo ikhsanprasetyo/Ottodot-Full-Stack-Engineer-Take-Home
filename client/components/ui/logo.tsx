@@ -11,13 +11,13 @@ type LogoProps = {
   href?: string;
 };
 
-const sizeMap = {
+const heightMap = {
   sm: 24,
-  md: 36,
-  lg: 48,
-  xl: 64,
-  xxl: 80,
-  xxxl: 100
+  md: 32,
+  lg: 40,
+  xl: 52,
+  xxl: 64,
+  xxxl: 84
 };
 
 export const Logo: React.FC<LogoProps> = ({
@@ -26,8 +26,8 @@ export const Logo: React.FC<LogoProps> = ({
   isCircle = false,
   href = '/dashboard'
 }) => {
-  const imageSize = sizeMap[size];
-  const logoUrl = process.env.NEXT_PUBLIC_LOGO_IMAGE || '/logo-full-color.png';
+  const targetHeight = heightMap[size];
+  const logoUrl = process.env.NEXT_PUBLIC_LOGO_IMAGE || '/logo.webp';
 
   const content = (
     <div
@@ -36,18 +36,15 @@ export const Logo: React.FC<LogoProps> = ({
         className,
         isCircle ? 'rounded-full overflow-hidden' : ''
       )}
-      style={{ width: imageSize, height: imageSize }}
+      style={{ height: targetHeight, width: 'auto' }}
     >
-      <Image
+      <img
         src={logoUrl}
-        alt="Sinar Utama Logo"
-        width={imageSize}
-        height={imageSize}
-        priority
-        unoptimized
+        alt="Ottodot Logo"
+        style={{ height: targetHeight, width: 'auto', objectFit: 'contain' }}
         className={cn(
           isCircle ? 'rounded-full' : '',
-          'group-hover:scale-105 transition-transform duration-200 object-contain'
+          'group-hover:scale-105 transition-transform duration-200 h-full w-auto object-contain'
         )}
       />
     </div>

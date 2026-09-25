@@ -33,6 +33,7 @@ import {
   XCircle,
   Filter
 } from 'lucide-react';
+import { Logo } from '@/components/ui/logo';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -485,17 +486,10 @@ export default function DashboardPage() {
       <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-[#EDE7DC]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-[#FFF6E5] border border-[#EDE7DC] rounded-sm text-[#E73449]">
-              <BookOpen className="w-5 h-5" />
-            </div>
-            <div>
-              <span className="font-serif font-bold text-[#15172B] text-xl tracking-tight">
-                Ottodot
-              </span>
-              <span className="text-xs text-[#E73449] font-bold ml-2 px-2 py-0.5 bg-[#FFF6E5] border border-[#EDE7DC] rounded-sm uppercase tracking-wider">
-                Tuition Portal
-              </span>
-            </div>
+            <Logo size="lg" href="/dashboard" />
+            <span className="text-xs text-[#E73449] font-bold px-2 py-0.5 bg-[#FFF6E5] border border-[#EDE7DC] rounded-sm uppercase tracking-wider">
+              Tuition Portal
+            </span>
           </div>
 
           <div className="flex items-center gap-3">

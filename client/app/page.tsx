@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   Lock
 } from 'lucide-react';
+import { Logo } from '@/components/ui/logo';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -68,6 +69,10 @@ export default function LoginPage() {
       </div>
 
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center relative z-10">
+        <div className="flex justify-center mb-4">
+          <Logo size="lg" href="/" />
+        </div>
+
         <div className="inline-flex items-center gap-2 bg-white border border-[#EDE7DC] px-4 py-2 rounded-sm shadow-sm mb-4">
           <BookOpen className="w-4 h-4 text-[#E73449]" />
           <span className="bg-[#E73449] text-white px-2 py-0.5 rounded-sm text-xs font-bold uppercase tracking-wide">
@@ -79,8 +84,7 @@ export default function LoginPage() {
         </div>
 
         <h1 className="font-serif text-3xl sm:text-4xl font-extrabold text-[#15172B] tracking-tight">
-          Ottodot <span className="italic text-[#E73449]">Tuition</span>{' '}
-          Platform
+          <span className="italic text-[#E73449]">Tuition</span> Platform
         </h1>
         <p className="mt-2 text-sm text-[#3F4159]">
           Primary Math &amp; Science Tuition blended with Roblox gameplay
