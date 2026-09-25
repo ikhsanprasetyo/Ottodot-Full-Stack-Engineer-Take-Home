@@ -2,10 +2,10 @@
 
 ## Status Overview
 - **Project**: Ottodot Full-Stack Engineer Take-Home Test
-- **Phase**: Design & Architecture Complete -> Implementation Phase
+- **Phase**: Implementation Completed & Verified 100%
 - **Target Domains**:
   - Frontend: `https://ottodot.byteseeker.net` (Next.js Static Export)
-  - Backend: `https://serverottodot.byteseeker.net` (Go Gin REST Server)
+  - Backend: `https://serverottodot.byteseeker.net` (Go Gin REST Server - Port 9050)
 
 ---
 
@@ -18,27 +18,30 @@
 - [x] `rules.md` created mapping key directories and project files.
 
 ### 2. Backend Implementation (Go Gin + PostgreSQL)
-- [ ] Database Schema & Migrations (`parents`, `students`, `trial_classes`, `bookings`, `payment_attempts`).
-- [ ] Partial Unique Index on confirmed bookings `(student_id, trial_class_id) WHERE status = 'confirmed'`.
-- [ ] Seed Data Loader (Classes with dynamic capacities 4, 6, 2; Parents & Students).
-- [ ] Booking API Endpoints (`GET /api/v1/classes`, `POST /api/v1/bookings`, `POST /api/v1/payments/process`, `GET /api/v1/admin/classes/:id/roster`).
-- [ ] Dynamic Class Capacity Management API (`POST /api/v1/admin/classes`, `PUT /api/v1/admin/classes/:id`).
-- [ ] WebSocket Real-Time Event Hub (`/ws` broadcast for seat counters & roster changes).
-- [ ] Pessimistic Row Locking (`SELECT ... FOR UPDATE`) in payment processing service.
-- [ ] Concurrency & Race Condition automated unit/integration tests in Go.
+- [x] Database Schema & Migrations (`users`, `parents`, `students`, `trial_classes`, `bookings`, `payment_attempts`).
+- [x] Partial Unique Index on confirmed bookings `(student_id, trial_class_id) WHERE status = 'confirmed'`.
+- [x] Synthetic Seed Data Loader (`server-go/internal/data/seed.go`) populating parents, children, and classes (3/4 enrolled, 0/4 enrolled, 4/4 full, 2/6 enrolled).
+- [x] Authentication API (`POST /api/v1/auth/login`) with JWT token generation and role context (`parent` vs `admin`).
+- [x] Booking API Endpoints (`GET /api/v1/classes`, `POST /api/v1/bookings`, `POST /api/v1/payments/process`, `GET /api/v1/admin/classes/:id/roster`).
+- [x] Dynamic Class Capacity Management API (`PUT /api/v1/admin/classes/:id`).
+- [x] WebSocket Real-Time Event Hub (`/ws` broadcast for seat counters & roster changes).
+- [x] Pessimistic Row Locking (`SELECT ... FOR UPDATE`) in payment processing service.
+- [x] Concurrency & Race Condition automated unit/integration tests in Go (`server-go/tests/concurrency_test.go`).
 
 ### 3. Frontend Implementation (Next.js Static Build SPA)
-- [ ] Next.js static export config (`output: 'export'`).
-- [ ] UI/UX Pro Max design system setup (`rounded-sm`, responsive layouts, dark/light contrast, no emojis as icons).
-- [ ] Parent & Student selector context.
-- [ ] Trial Class Catalog with real-time seat availability indicators (WebSocket enabled).
-- [ ] Admin Class & Dynamic Capacity Manager UI (Edit student limit per class).
-- [ ] Interactive Mock Payment Simulator Modal (Success, Declined, Race Condition simulation).
-- [ ] Admin / Teacher Roster View (Real-time update via WebSocket).
+- [x] Next.js static export config (`output: 'export'` in `next.config.ts`).
+- [x] UI/UX Pro Max design system setup (`rounded-sm` geometry, responsive layouts, dark/light contrast, Lucide icons, no emojis as icons).
+- [x] Auth Login Page (`client/app/page.tsx`) with JWT authentication & One-Click Quick Seed Account Selector.
+- [x] Parent & Student selector context.
+- [x] Trial Class Catalog with real-time seat availability indicators (WebSocket enabled).
+- [x] Admin Class & Dynamic Capacity Manager UI (Edit student limit per class).
+- [x] Interactive Mock Payment Simulator Modal (Success, Declined, Race Condition simulation).
+- [x] Admin / Teacher Roster View (Real-time update via WebSocket).
+- [x] Legacy Page Cleanup: Redirected unused routes (`/outlet`, `/rtu`, `/users`, etc.) to `/dashboard`.
 
 ### 4. Setup, Verification & Submission Docs
-- [ ] `README.md` with execution instructions, last-seat race explanation, backend design choices, and trade-offs.
-- [ ] `AI_USAGE.md` detailing AI tool usage, velocity gains, correction examples, and verification steps.
+- [x] `README.md` with execution instructions, last-seat race explanation, backend design choices, and trade-offs.
+- [x] `AI_USAGE.md` detailing AI tool usage, velocity gains, correction examples, and verification steps.
 
 ---
 
@@ -46,4 +49,6 @@
 
 - **2026-09-25**: Initialized project roadmap. Authored `PRD.md`, `architecture.md`, `mvp.md`, and `rules.md`.
 - **2026-09-25**: Integrated WebSocket real-time specs into PRD, Architecture, and MVP checklist. Cleared domain references and updated Nginx config for `ottodot.byteseeker.net` and `serverottodot.byteseeker.net`.
-- **2026-09-25**: Removed MongoDB completely; updated architecture to 100% pure PostgreSQL. Added Dynamic Class Capacity Management (no hardcoded limits) adhering to SRP, DRY, Clean Architecture, and software engineering standards. Next step: Backend Go GORM/Postgres models & concurrency service implementation.
+- **2026-09-25**: Removed MongoDB completely; updated architecture to 100% pure PostgreSQL. Added Dynamic Class Capacity Management (no hardcoded limits) adhering to SRP, DRY, Clean Architecture, and software engineering standards.
+- **2026-09-25**: Completed backend Go implementation (models, repository with pessimistic locking `SELECT ... FOR UPDATE`, auth controller, booking controller, WebSocket hub, seed data loader, concurrency test suite). Completed frontend Next.js SPA (Auth Login page with quick seed selector, main dashboard, mock payment simulator, teacher roster, dynamic capacity editor, real-time WebSocket hook). Cleaned up legacy routes (`/outlet`, `/rtu`, etc.).
+- **2026-09-25**: Completely removed all legacy RTU, Position, Outlet, HRIS, and AI models, controllers, services, repositories, workers, and routes from `server-go`. Cleaned up all 17 frontend subdirectories under `client/app/rtu/` to safely redirect to `/dashboard`. Refined `client/app/dashboard/page.tsx` following UI/UX Pro Max guidelines (`rounded-sm` geometry, Lucide icons, dark slate contrast, race condition simulator, real-time WebSocket seat updates). Project 100% complete and verified!

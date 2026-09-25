@@ -49,12 +49,10 @@ func (r *UserRepository) FindByID(ctx context.Context, id uuid.UUID) (*models.Us
 	return &user, err
 }
 
-// FindByIDWithPopulate finds a user and preloads Outlet + Position associations
+// FindByIDWithPopulate finds a user and preloads Activity association
 func (r *UserRepository) FindByIDWithPopulate(ctx context.Context, id uuid.UUID) (*models.User, error) {
 	var user models.User
 	err := r.db.WithContext(ctx).
-		Preload("Outlet").
-		Preload("Position").
 		Preload("Activity").
 		Where("users.id = ? AND users.is_deleted = false", id).
 		Take(&user).Error
@@ -74,9 +72,6 @@ func (r *UserRepository) Create(ctx context.Context, user *models.User) error {
 
 	if user.Role == "" {
 		user.Role = "user"
-	}
-	if user.OutletAccessMode == "" {
-		user.OutletAccessMode = "single"
 	}
 	if user.RoleApproval == "" {
 		user.RoleApproval = "no"

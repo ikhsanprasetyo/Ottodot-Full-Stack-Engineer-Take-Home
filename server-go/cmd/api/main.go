@@ -12,7 +12,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/yourusername/kpi-backend/internal/config"
 	"github.com/yourusername/kpi-backend/internal/routes"
-	"github.com/yourusername/kpi-backend/internal/worker"
 	"github.com/yourusername/kpi-backend/pkg/logger"
 	"go.uber.org/zap"
 )
@@ -31,7 +30,7 @@ func main() {
 	}
 	defer logger.Sync()
 
-	logger.Log.Info("Starting DTFC Backend - Golang",
+	logger.Log.Info("Starting Ottodot Trial Booking Server - Golang",
 		zap.String("env", config.AppConfig.Env),
 		zap.String("port", config.AppConfig.Port),
 	)
@@ -41,7 +40,6 @@ func main() {
 		logger.Log.Fatal("Failed to connect to PostgreSQL", zap.Error(err))
 	}
 	defer config.DisconnectPostgres()
-
 
 	// Set Gin mode
 	gin.SetMode(config.AppConfig.GinMode)
@@ -61,18 +59,13 @@ func main() {
 		MaxHeaderBytes: 1 << 20, // 1 MB
 	}
 
-	// Start background worker for online duration & history
-	workerCtx, workerCancel := context.WithCancel(context.Background())
-	defer workerCancel()
-	go worker.StartUserOnlineWorker(workerCtx)
-
 	// Start server in goroutine
 	go func() {
 		logger.Log.Info("Server started",
 			zap.String("address", srv.Addr),
 			zap.String("mode", config.AppConfig.GinMode),
 		)
-		
+
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			logger.Log.Fatal("Failed to start server", zap.Error(err))
 		}

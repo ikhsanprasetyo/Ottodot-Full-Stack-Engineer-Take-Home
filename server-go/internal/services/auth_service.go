@@ -12,9 +12,9 @@ import (
 	"github.com/mileusna/useragent"
 	"github.com/yourusername/kpi-backend/internal/models"
 	"github.com/yourusername/kpi-backend/internal/repositories"
+	"github.com/yourusername/kpi-backend/internal/utils"
 	"github.com/yourusername/kpi-backend/pkg/logger"
 	"github.com/yourusername/kpi-backend/pkg/security"
-	"github.com/yourusername/kpi-backend/internal/utils"
 	"go.uber.org/zap"
 )
 

@@ -64,13 +64,6 @@ type User struct {
 	Phone          *string    `                                                       json:"phone,omitempty"`
 	ProfilePicture *string    `                                                       json:"profilePicture,omitempty"`
 
-	// Foreign Keys
-	OutletID   *uuid.UUID `gorm:"type:uuid;index"  json:"outlet,omitempty"`
-	PositionID *uuid.UUID `gorm:"type:uuid;index"  json:"position,omitempty"`
-
-	// Associations (populated on demand)
-	Outlet   *Outlet       `gorm:"foreignKey:OutletID"   json:"outletDoc,omitempty"`
-	Position *Position     `gorm:"foreignKey:PositionID" json:"positionDoc,omitempty"`
 	Activity *UserActivity `gorm:"foreignKey:UserID;references:ID" json:"activity,omitempty"`
 
 	// Auth (Deprecated: use Activity instead for high-frequency data)

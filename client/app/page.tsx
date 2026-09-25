@@ -1,343 +1,179 @@
 'use client';
 
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { toast } from 'sonner';
-import { useRouter } from 'next/navigation'; // App Router
-import { saveUserSession } from '@/lib/saveUserSession';
-import { useLogin, useRegister } from '@/lib/hooks/mutation/auth';
-import LoadingSpinner from '@/components/ui/loading-spinner';
-import { useAuthRedirect } from '@/lib/hooks/useAuthRedirect';
-import { Logo } from '@/components/ui/logo';
-import { BackgroundImage } from '@/components/ui/background-image';
-import Link from 'next/link';
-import { FormInput } from '@/components/ui/form-input';
-// Schema validation
-const loginSchema = z.object({
-  email: z
-    .string()
-    //.email('Invalid email address')
-    .min(3, 'Must be at least 3 characters'),
-  password: z.string().min(6, 'Password must be at least 6 characters')
-});
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { ottodotApi } from '@/lib/ottodot-api';
+import { LogIn, User, Shield, Sparkles, BookOpen, CheckCircle2, Lock } from 'lucide-react';
 
-const registerSchema = z
-  .object({
-    name: z.string().min(3, 'Username must be at least 1 character'),
-    username: z
-      .string()
-      .min(3, 'Username must be at least 3 characters')
-      .regex(/^\S+$/, 'Username must not contain spaces'),
-    email: z.string().email('Invalid email address'),
-    password: z.string().min(6, 'Password must be at least 6 characters'),
-    confirmPassword: z.string()
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ['confirmPassword']
-  });
-
-export default function AuthPage() {
-  useAuthRedirect(false, '/dashboard');
+export default function LoginPage() {
   const router = useRouter();
-  // Initialize forms
-  const loginForm = useForm({
-    resolver: zodResolver(loginSchema),
-    defaultValues: { email: '', password: '' }
-  });
+  const [email, setEmail] = useState('parent1@byteseeker.net');
+  const [password, setPassword] = useState('password123');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const registerForm = useForm({
-    resolver: zodResolver(registerSchema),
-    defaultValues: {
-      name: '',
-      username: '',
-      email: '',
-      password: '',
-      confirmPassword: ''
-    }
-  });
+  const handleLogin = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    setLoading(true);
+    setError(null);
 
-  const { mutateAsync: login, isPending: isPendingLogin } = useLogin();
-  const handleLogin = async (data: { email: string; password: string }) => {
     try {
-      const res = await login(data); // ← pakai mutateAsync
-      const user = res?.data;
-      saveUserSession(user);
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('last_location_update');
+      const res = await ottodotApi.login(email, password);
+      if (res.success && res.data.token) {
+        localStorage.setItem('ottodot_token', res.data.token);
+        localStorage.setItem('ottodot_user', JSON.stringify(res.data.user));
+        router.push('/dashboard');
+      } else {
+        setError(res.error || 'Login failed');
       }
-      toast.success(`Welcome back ${user?.name || ''}! Login successful`);
-      //console.log({ user });
-      router.push('/dashboard');
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || 'Login failed', {
-        duration: 4000
-      });
-      console.error('Login error:', error);
+    } catch (err: any) {
+      setError(err.response?.data?.error || 'Invalid credentials or server unavailable');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const { mutateAsync: register, isPending: isPendingRegister } = useRegister();
-  const handleRegister = async (data: {
-    name: string;
-    username: string;
-    email: string;
-    password: string;
-  }) => {
-    try {
-      const res = await register(data);
-      const user = res?.data;
-      saveUserSession(user);
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem('last_location_update');
-      }
-      //console.log({ user });
-      toast.success(`Welcome ${user?.name || ''}! Registration successful`);
-      router.push('/dashboard');
-    } catch (error: any) {
-      const message =
-        error.response?.data?.message ||
-        (error.username === 'AbortError'
-          ? 'Request timeout'
-          : 'Registration failed');
-
-      toast.error(message, { duration: 4000 });
-      console.error('Register error:', error);
-    }
+  const quickLogin = (quickEmail: string, role: string, name: string) => {
+    setEmail(quickEmail);
+    setPassword('password123');
+    // Save transient demo state
+    localStorage.setItem('ottodot_demo_role', role);
+    localStorage.setItem('ottodot_demo_name', name);
+    setTimeout(() => {
+      handleLogin();
+    }, 100);
   };
 
   return (
-    <BackgroundImage
-      src="/bg-snt.jpg"
-      alt="Background"
-      overlayClassName="bg-black/30"
-      className="flex items-center min-h-screen relative z-10 min-w-full"
-    >
-      {(isPendingLogin || isPendingRegister) && <LoadingSpinner />}
-      <div className="flex w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="w-full flex justify-center">
-          <Tabs
-            defaultValue="login"
-            className="
-    w-full 
-    max-w-full
-    sm:max-w-md 
-    md:max-w-lg 
-    lg:max-w-[650px]
-  "
-          >
-            <div className="flex justify-center mb-4">
-              <Logo size="xl" />
-            </div>
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8 selection:bg-indigo-500 selection:text-white">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
+        <div className="inline-flex items-center justify-center p-3 bg-indigo-600/20 border border-indigo-500/30 rounded-sm mb-4">
+          <BookOpen className="w-8 h-8 text-indigo-400" />
+        </div>
+        <h2 className="text-3xl font-extrabold tracking-tight text-white">
+          Ottodot Learning
+        </h2>
+        <p className="mt-2 text-sm text-slate-400">
+          Trial Booking Reliability & Live Class Platform
+        </p>
+      </div>
+
+      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="bg-slate-900 border border-slate-800 py-8 px-6 shadow-2xl rounded-sm sm:px-10">
+          <form className="space-y-5" onSubmit={handleLogin}>
+            {error && (
+              <div className="bg-rose-950/80 border border-rose-600/50 text-rose-200 text-xs p-3 rounded-sm">
+                {error}
+              </div>
+            )}
+
             <div>
-              <p className="text-gray-100 mb-1 text-center text-2xl">
-                Sistem Manajemen Produksi RTU
-              </p>
-              <p className="text-gray-100 mb-4 text-center text-2xl">
-                Sinar Utama Mie Ayam Setiap Hari
-              </p>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
+                Email Address
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
+                  <User className="w-4 h-4" />
+                </div>
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="block w-full pl-10 pr-3 py-2.5 bg-slate-950 border border-slate-800 rounded-sm text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                  placeholder="name@example.com"
+                />
+              </div>
             </div>
 
-            <TabsList className="grid w-full grid-cols-2 sticky top-0 z-10 mb-0 rounded-b-none border-b-0 bg-white/95 border border-gray-200/80 shadow-sm backdrop-blur-md">
-              <TabsTrigger value="login">Login</TabsTrigger>
-              <TabsTrigger value="register">Register</TabsTrigger>
-            </TabsList>
+            <div>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">
+                Password
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500">
+                  <Lock className="w-4 h-4" />
+                </div>
+                <input
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="block w-full pl-10 pr-3 py-2.5 bg-slate-950 border border-slate-800 rounded-sm text-sm text-slate-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
+                  placeholder="••••••••"
+                />
+              </div>
+            </div>
 
-            {/* Login Tab */}
-            <TabsContent value="login" className="mt-0">
-              <Card className="flex flex-col rounded-t-none border-t-0 shadow-lg">
-                <CardHeader>
-                  <CardTitle className="text-2xl">Login</CardTitle>
-                  <CardDescription>Enter your credentials</CardDescription>
-                </CardHeader>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full flex justify-center items-center gap-2 py-2.5 px-4 border border-transparent rounded-sm text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer disabled:opacity-50 transition-all shadow-lg shadow-indigo-600/20"
+            >
+              {loading ? (
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <>
+                  <LogIn className="w-4 h-4" />
+                  Sign In to Dashboard
+                </>
+              )}
+            </button>
+          </form>
 
-                <form onSubmit={loginForm.handleSubmit(handleLogin)}>
-                  <CardContent className="grid gap-2">
-                    <div className="grid gap-2">
-                      <Label htmlFor="email">Username or Email</Label>
-                      <Input
-                        id="email"
-                        type="text"
-                        placeholder="john or john@example.com"
-                        {...loginForm.register('email')}
-                      />
-                      {loginForm.formState.errors.email && (
-                        <p className="text-sm text-red-500">
-                          {loginForm.formState.errors.email.message}
-                        </p>
-                      )}
-                    </div>
+          {/* Quick Demo Login Selector */}
+          <div className="mt-8 border-t border-slate-800 pt-6">
+            <div className="flex items-center gap-1.5 mb-3 text-xs font-semibold uppercase tracking-wider text-indigo-400">
+              <Sparkles className="w-3.5 h-3.5" />
+              Quick Demo Accounts
+            </div>
+            <div className="space-y-2">
+              <button
+                type="button"
+                onClick={() => quickLogin('parent1@byteseeker.net', 'parent', 'Ikhsan Parent')}
+                className="w-full flex items-center justify-between p-2.5 bg-slate-950 hover:bg-slate-800/60 border border-slate-800/80 rounded-sm text-left transition-colors cursor-pointer group"
+              >
+                <div>
+                  <div className="text-xs font-semibold text-slate-200 group-hover:text-indigo-400">
+                    Parent 1: Ikhsan Parent
+                  </div>
+                  <div className="text-[11px] text-slate-500">2 Children: Leo (8y), Maya (10y)</div>
+                </div>
+                <CheckCircle2 className="w-4 h-4 text-slate-600 group-hover:text-indigo-400" />
+              </button>
 
-                    <FormInput
-                      label="Password"
-                      type="password"
-                      placeholder="••••••••"
-                      value={loginForm.watch('password')}
-                      onChange={(e) =>
-                        loginForm.setValue('password', e.target.value)
-                      }
-                    />
-                    {loginForm.formState.errors.password && (
-                      <p className="text-sm text-red-500">
-                        {loginForm.formState.errors.password.message}
-                      </p>
-                    )}
-                  </CardContent>
+              <button
+                type="button"
+                onClick={() => quickLogin('parent2@byteseeker.net', 'parent', 'Sarah Jenkins')}
+                className="w-full flex items-center justify-between p-2.5 bg-slate-950 hover:bg-slate-800/60 border border-slate-800/80 rounded-sm text-left transition-colors cursor-pointer group"
+              >
+                <div>
+                  <div className="text-xs font-semibold text-slate-200 group-hover:text-indigo-400">
+                    Parent 2: Sarah Jenkins
+                  </div>
+                  <div className="text-[11px] text-slate-500">1 Child: Ethan (7y)</div>
+                </div>
+                <CheckCircle2 className="w-4 h-4 text-slate-600 group-hover:text-indigo-400" />
+              </button>
 
-                  <CardFooter>
-                    <div className="grid gap-2 w-full">
-                      <Button
-                        variant="green"
-                        type="submit"
-                        size="sm"
-                        className="w-full"
-                        disabled={loginForm.formState.isSubmitting}
-                      >
-                        {loginForm.formState.isSubmitting
-                          ? 'Signing in...'
-                          : 'Sign In'}
-                      </Button>
-                      <Link
-                        href="/forgot-password"
-                        className="text-center text-md text-blue-600 hover:underline"
-                      >
-                        Forgot Password?
-                      </Link>
-                    </div>
-                  </CardFooter>
-                </form>
-              </Card>
-            </TabsContent>
-
-            {/* Register Tab */}
-            <TabsContent value="register" className="mt-0">
-              <Card className="flex flex-col rounded-t-none border-t-0 shadow-lg">
-                <CardHeader>
-                  <CardTitle className="text-2xl">Register</CardTitle>
-                  <CardDescription>Create new account</CardDescription>
-                </CardHeader>
-
-                <form onSubmit={registerForm.handleSubmit(handleRegister)}>
-                  <CardContent className="grid gap-4">
-                    <div className="grid gap-2">
-                      <Label htmlFor="username">Username</Label>
-                      <Input
-                        id="username"
-                        type="text"
-                        placeholder="JohnDoe"
-                        {...registerForm.register('username')}
-                      />
-                      {registerForm.formState.errors.username && (
-                        <p className="text-sm text-red-500">
-                          {registerForm.formState.errors.username.message}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="grid gap-2">
-                      <Label htmlFor="name">Full Name</Label>
-                      <Input
-                        id="name"
-                        type="text"
-                        placeholder="John Doe"
-                        {...registerForm.register('name')}
-                      />
-                      {registerForm.formState.errors.name && (
-                        <p className="text-sm text-red-500">
-                          {registerForm.formState.errors.name.message}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="grid gap-2">
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="john@example.com"
-                        {...registerForm.register('email')}
-                      />
-                      {registerForm.formState.errors.email && (
-                        <p className="text-sm text-red-500">
-                          {registerForm.formState.errors.email.message}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="grid gap-2">
-                      <FormInput
-                        label="Password"
-                        type="password"
-                        placeholder="••••••••"
-                        value={registerForm.watch('password')}
-                        onChange={(e) =>
-                          registerForm.setValue('password', e.target.value)
-                        }
-                        showStrength
-                      />
-                      {registerForm.formState.errors.password && (
-                        <p className="text-sm text-red-500">
-                          {registerForm.formState.errors.password.message}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="grid gap-2">
-                      <FormInput
-                        label="Confirm Password"
-                        type="password"
-                        placeholder="••••••••"
-                        value={registerForm.watch('confirmPassword')}
-                        onChange={(e) =>
-                          registerForm.setValue(
-                            'confirmPassword',
-                            e.target.value
-                          )
-                        }
-                      />
-                      {registerForm.formState.errors.confirmPassword && (
-                        <p className="text-sm text-red-500">
-                          {
-                            registerForm.formState.errors.confirmPassword
-                              .message
-                          }
-                        </p>
-                      )}
-                    </div>
-                  </CardContent>
-
-                  <CardFooter>
-                    <Button
-                      variant="green"
-                      type="submit"
-                      size="sm"
-                      className="w-full"
-                      disabled={registerForm.formState.isSubmitting}
-                    >
-                      {registerForm.formState.isSubmitting
-                        ? 'Creating account...'
-                        : 'Create Account'}
-                    </Button>
-                  </CardFooter>
-                </form>
-              </Card>
-            </TabsContent>
-          </Tabs>
+              <button
+                type="button"
+                onClick={() => quickLogin('admin@ottodot.net', 'admin', 'Ottodot Teacher Admin')}
+                className="w-full flex items-center justify-between p-2.5 bg-indigo-950/40 hover:bg-indigo-900/40 border border-indigo-800/50 rounded-sm text-left transition-colors cursor-pointer group"
+              >
+                <div>
+                  <div className="text-xs font-semibold text-indigo-300 group-hover:text-indigo-200 flex items-center gap-1.5">
+                    <Shield className="w-3.5 h-3.5 text-indigo-400" />
+                    Teacher / Admin Account
+                  </div>
+                  <div className="text-[11px] text-indigo-400/80">View Rosters & Edit Class Limits</div>
+                </div>
+                <CheckCircle2 className="w-4 h-4 text-indigo-500" />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-    </BackgroundImage>
+    </div>
   );
 }
