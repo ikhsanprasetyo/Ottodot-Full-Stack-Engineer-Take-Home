@@ -552,7 +552,7 @@ export default function DashboardPage() {
       <header className="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-[#EDE7DC]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Logo size="lg" href="/dashboard" />
+            <Logo size="md" href="/dashboard" />
             <span className="text-xs text-[#E73449] font-bold px-2 py-0.5 bg-[#FFF6E5] border border-[#EDE7DC] rounded-sm uppercase tracking-wider">
               Tuition Portal
             </span>

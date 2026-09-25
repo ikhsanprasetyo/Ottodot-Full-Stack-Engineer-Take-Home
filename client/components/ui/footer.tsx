@@ -19,9 +19,6 @@ export const Footer = () => {
         <div className="grid grid-cols-3 md:grid-cols-3 gap-8 mb-12">
           <div className="col-span-1 md:col-span-2">
             <Logo />
-            <p className="text-gray-400 mb-4 max-w-md">
-              Sinar Utama Mie Ayam Setiap Hari.
-            </p>
 
             <div className="flex space-x-4">
               {/* Instagram */}
