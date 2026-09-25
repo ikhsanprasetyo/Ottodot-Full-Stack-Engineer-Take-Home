@@ -57,7 +57,7 @@
     --input: 37 32% 90%;
     --ring: 353 79% 55%;
 
-    --radius: 0.125rem; /* rounded-sm */
+    --radius: 6px; /* rounded-sm */
   }
 
   .dark {
@@ -95,6 +95,12 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .rounded-sm {
+    border-radius: 6px !important;
   }
 }
 

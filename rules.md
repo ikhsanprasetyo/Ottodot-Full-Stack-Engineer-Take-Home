@@ -15,6 +15,8 @@
 - Auth Login Page: `client/app/page.tsx` (JWT login & Quick Seed Selector)
 - Main Dashboard SPA: `client/app/dashboard/page.tsx` (Classes discovery, Payment simulator, Bookings status, Teacher Roster & Dynamic Capacity Manager)
 - API Client Integration: `client/lib/ottodot-api.ts` (Axios API targeting `serverottodot.byteseeker.net` / port 9050)
+- Custom React Query Hooks: `client/lib/hooks/queries/ottodot.ts` (`useGetTrialClasses`, `useGetParentsAndStudents`, `useGetClassRoster`)
+- Custom React Mutation Hooks: `client/lib/hooks/mutation/ottodot.ts` (`useCreateBookingMutation`, `useProcessPaymentMutation`, `useUpdateClassCapacityMutation`)
 - Real-time WebSocket Hook: `client/lib/useWebSocket.ts`
 - Static Export Configuration: `client/next.config.ts` (`output: 'export'`)
 - Domain Configuration: `https://ottodot.byteseeker.net`

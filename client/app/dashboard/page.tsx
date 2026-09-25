@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   ottodotApi,
   TrialClass,
@@ -22,7 +23,6 @@ import {
   AlertTriangle,
   Clock,
   Shield,
-  Zap,
   LogOut,
   ChevronRight,
   RefreshCw,
@@ -37,6 +37,7 @@ import { Logo } from '@/components/ui/logo';
 
 export default function DashboardPage() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [classes, setClasses] = useState<TrialClass[]>([]);
   const [parents, setParents] = useState<Parent[]>([]);
   const [selectedParent, setSelectedParent] = useState<Parent | null>(null);
@@ -217,6 +218,9 @@ export default function DashboardPage() {
     );
     setPaymentLoading(false);
 
+    const newStatus =
+      res.success && res.data.success ? 'confirmed' : 'payment_failed';
+
     if (res.success && res.data.success) {
       setPaymentResult({
         success: true,
@@ -239,7 +243,26 @@ export default function DashboardPage() {
         prev ? { ...prev, status: 'payment_failed' } : null
       );
     }
+
+    // Invalidate queries & update Submitted Booking Records state
+    setUserBookings((prev) =>
+      prev.map((b) =>
+        b.id === activeBooking.id ? { ...b, status: newStatus } : b
+      )
+    );
+    queryClient.invalidateQueries({ queryKey: ['bookings'] });
+    queryClient.invalidateQueries({ queryKey: ['userBookings'] });
+    queryClient.invalidateQueries({ queryKey: ['classes'] });
+    queryClient.invalidateQueries({ queryKey: ['roster'] });
+
     loadData();
+
+    if (selectedRosterClassId) {
+      ottodotApi
+        .getClassRoster(selectedRosterClassId)
+        .then(setRosterData)
+        .catch(() => {});
+    }
   };
 
   // Handle Concurrent Last-Seat Race Test Simulation
@@ -306,6 +329,11 @@ export default function DashboardPage() {
         message: `RACE CONDITION TEST COMPLETED: Out of 2 simultaneous payments for the last seat, exactly ${successCount} user was confirmed (100% PostgreSQL Row Lock Data Protection Guaranteed!).`
       });
 
+      queryClient.invalidateQueries({ queryKey: ['bookings'] });
+      queryClient.invalidateQueries({ queryKey: ['userBookings'] });
+      queryClient.invalidateQueries({ queryKey: ['classes'] });
+      queryClient.invalidateQueries({ queryKey: ['roster'] });
+
       loadData();
     } catch (err: any) {
       setPaymentResult({
@@ -350,7 +378,7 @@ export default function DashboardPage() {
       {
         id: 'index',
         header: '#',
-        size: 50,
+        size: 50
       },
       {
         accessorKey: 'title',
@@ -370,7 +398,7 @@ export default function DashboardPage() {
               )}
             </div>
           );
-        },
+        }
       },
       {
         accessorKey: 'subject',
@@ -379,7 +407,7 @@ export default function DashboardPage() {
           <span className="px-2.5 py-0.5 text-[10px] font-bold uppercase rounded-sm bg-[#FFF6E5] text-[#E73449] border border-[#EDE7DC]">
             {row.original.subject}
           </span>
-        ),
+        )
       },
       {
         accessorKey: 'start_time',
@@ -388,7 +416,7 @@ export default function DashboardPage() {
           <span className="text-[#3F4159] text-xs font-medium">
             {new Date(row.original.start_time).toLocaleString()}
           </span>
-        ),
+        )
       },
       {
         accessorKey: 'enrolled_count',
@@ -409,8 +437,8 @@ export default function DashboardPage() {
               {row.original.enrolled_count} / {row.original.capacity} Students
             </span>
           );
-        },
-      },
+        }
+      }
     ],
     [selectedRosterClassId]
   );
@@ -420,7 +448,7 @@ export default function DashboardPage() {
       {
         id: 'index',
         header: '#',
-        size: 50,
+        size: 50
       },
       {
         accessorKey: 'student.name',
@@ -429,7 +457,7 @@ export default function DashboardPage() {
           <span className="font-bold text-[#15172B] text-xs">
             {row.original.student?.name}
           </span>
-        ),
+        )
       },
       {
         accessorKey: 'student.age',
@@ -438,7 +466,7 @@ export default function DashboardPage() {
           <span className="text-[#3F4159] text-xs">
             {row.original.student?.age} y.o
           </span>
-        ),
+        )
       },
       {
         accessorKey: 'student.parent.name',
@@ -447,7 +475,7 @@ export default function DashboardPage() {
           <span className="font-semibold text-[#E73449] text-xs">
             {row.original.student?.parent?.name}
           </span>
-        ),
+        )
       },
       {
         accessorKey: 'student.parent.email',
@@ -459,7 +487,7 @@ export default function DashboardPage() {
               {row.original.student?.parent?.phone}
             </div>
           </div>
-        ),
+        )
       },
       {
         accessorKey: 'status',
@@ -468,8 +496,8 @@ export default function DashboardPage() {
           <span className="px-2 py-0.5 bg-[#83C341] text-white font-bold rounded-sm text-[10px]">
             CONFIRMED
           </span>
-        ),
-      },
+        )
+      }
     ],
     []
   );
@@ -892,7 +920,6 @@ export default function DashboardPage() {
               {/* Race Condition Simulator Box */}
               <div className="mt-8 border-t border-[#EDE7DC] pt-6">
                 <div className="flex items-center gap-2 mb-2 text-xs font-bold text-[#E73449] uppercase tracking-wider">
-                  <Zap className="w-4 h-4 text-[#FBAE24]" />
                   Last-Seat Concurrency Race Tester
                 </div>
                 <p className="text-xs text-[#555770] mb-4">
@@ -905,7 +932,6 @@ export default function DashboardPage() {
                   onClick={handleSimulateLastSeatRace}
                   className="w-full py-3 px-4 bg-[#FFF6E5] hover:bg-[#FFECC9] border border-[#EDE7DC] text-[#15172B] rounded-sm font-bold text-xs uppercase tracking-wider cursor-pointer transition-all flex items-center justify-center gap-2"
                 >
-                  <Zap className="w-4 h-4 text-[#E73449]" />
                   Trigger Simultaneous Last-Seat Race Test
                 </button>
               </div>
@@ -973,7 +999,8 @@ export default function DashboardPage() {
                 Teacher Roster &amp; Dynamic Capacity Engine
               </h2>
               <p className="text-xs text-[#555770] mt-1">
-                Select a class from the table below to inspect real-time confirmed student roster and edit dynamic student limits
+                Select a class from the table below to inspect real-time
+                confirmed student roster and edit dynamic student limits
               </p>
             </div>
 
