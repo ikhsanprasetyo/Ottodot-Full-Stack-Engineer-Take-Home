@@ -22,7 +22,12 @@ export const metadata = {
     nocache: false
   },
   icons: {
-    icon: [{ url: '/favicon.ico' }]
+    icon: [
+      { url: '/logo.ico', type: 'image/x-icon' },
+      { url: '/favicon.ico', type: 'image/x-icon' }
+    ],
+    shortcut: '/logo.ico',
+    apple: '/logo.ico'
   },
   openGraph: {
     title: 'Primary Math & Science Tuition Singapore | Ottodot',
@@ -61,6 +66,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="icon" href="/logo.ico" sizes="any" />
+        <link rel="shortcut icon" href="/logo.ico" />
         {isProd && (
           <>
             {/* Google Analytics (GA4) */}
