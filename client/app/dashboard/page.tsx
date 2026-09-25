@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   ottodotApi,
@@ -11,6 +11,8 @@ import {
   RosterItem
 } from '@/lib/ottodot-api';
 import { useWebSocket } from '@/lib/useWebSocket';
+import { TableData, ExtendedColumnDef } from '@/components/ui/table-data';
+import { Button } from '@/components/ui/button';
 import {
   BookOpen,
   Calendar,
@@ -340,6 +342,133 @@ export default function DashboardPage() {
       setEditLoading(false);
     }
   };
+
+  // Table Columns Definition for TableData component
+  const adminClassColumns: ExtendedColumnDef<TrialClass>[] = useMemo(
+    () => [
+      {
+        id: 'index',
+        header: '#',
+        size: 50,
+      },
+      {
+        accessorKey: 'title',
+        header: 'Class Title',
+        cell: ({ row }) => {
+          const cls = row.original;
+          const isSelected = selectedRosterClassId === cls.id;
+          return (
+            <div className="flex items-center gap-2">
+              <span className="font-serif font-bold text-[#15172B] text-xs">
+                {cls.title}
+              </span>
+              {isSelected && (
+                <span className="px-2 py-0.5 bg-[#E73449] text-white text-[10px] font-bold rounded-sm uppercase">
+                  Active Roster
+                </span>
+              )}
+            </div>
+          );
+        },
+      },
+      {
+        accessorKey: 'subject',
+        header: 'Subject',
+        cell: ({ row }) => (
+          <span className="px-2 py-0.5 text-[10px] font-bold uppercase rounded-sm bg-[#FFF6E5] text-[#E73449] border border-[#EDE7DC]">
+            {row.original.subject}
+          </span>
+        ),
+      },
+      {
+        accessorKey: 'start_time',
+        header: 'Start Time',
+        cell: ({ row }) => (
+          <span className="text-[#3F4159] text-xs">
+            {new Date(row.original.start_time).toLocaleString()}
+          </span>
+        ),
+      },
+      {
+        accessorKey: 'enrolled_count',
+        header: 'Confirmed / Capacity',
+        cell: ({ row }) => {
+          const isFull = row.original.enrolled_count >= row.original.capacity;
+          return (
+            <span
+              className={`px-2.5 py-0.5 text-xs font-bold rounded-sm border ${
+                isFull
+                  ? 'bg-[#E73449] text-white border-[#C72236]'
+                  : 'bg-[#83C341] text-white border-[#6BA62F]'
+              }`}
+            >
+              {row.original.enrolled_count} / {row.original.capacity} Students
+            </span>
+          );
+        },
+      },
+    ],
+    [selectedRosterClassId]
+  );
+
+  const rosterColumns: ExtendedColumnDef<RosterItem>[] = useMemo(
+    () => [
+      {
+        id: 'index',
+        header: '#',
+        size: 50,
+      },
+      {
+        accessorKey: 'student.name',
+        header: 'Student Name',
+        cell: ({ row }) => (
+          <span className="font-bold text-[#15172B] text-xs">
+            {row.original.student?.name}
+          </span>
+        ),
+      },
+      {
+        accessorKey: 'student.age',
+        header: 'Age',
+        cell: ({ row }) => (
+          <span className="text-[#3F4159] text-xs">
+            {row.original.student?.age} y.o
+          </span>
+        ),
+      },
+      {
+        accessorKey: 'student.parent.name',
+        header: 'Parent Name',
+        cell: ({ row }) => (
+          <span className="font-semibold text-[#E73449] text-xs">
+            {row.original.student?.parent?.name}
+          </span>
+        ),
+      },
+      {
+        accessorKey: 'student.parent.email',
+        header: 'Parent Email / Phone',
+        cell: ({ row }) => (
+          <div className="text-xs text-[#3F4159]">
+            <div>{row.original.student?.parent?.email}</div>
+            <div className="text-[11px] text-[#555770]">
+              {row.original.student?.parent?.phone}
+            </div>
+          </div>
+        ),
+      },
+      {
+        accessorKey: 'status',
+        header: 'Status',
+        cell: () => (
+          <span className="px-2 py-0.5 bg-[#83C341] text-white font-bold rounded-sm text-[10px]">
+            CONFIRMED
+          </span>
+        ),
+      },
+    ],
+    []
+  );
 
   const filteredClasses = classes.filter(
     (c) =>
@@ -841,122 +970,67 @@ export default function DashboardPage() {
 
         {/* TAB 4: TEACHER ROSTER & DYNAMIC CAPACITY */}
         {activeTab === 'admin' && userRole === 'admin' && (
-          <div>
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-              <div>
-                <h2 className="font-serif text-2xl font-bold text-[#15172B]">
-                  Teacher Roster &amp; Dynamic Capacity
-                </h2>
-                <p className="text-xs text-[#555770]">
-                  View real-time confirmed rosters and edit dynamic student
-                  capacity limits
-                </p>
-              </div>
-
-              {/* Class Selector */}
-              <div className="flex items-center gap-2">
-                <label className="text-xs font-semibold text-[#555770]">
-                  Select Class:
-                </label>
-                <select
-                  value={selectedRosterClassId}
-                  onChange={(e) => setSelectedRosterClassId(e.target.value)}
-                  className="bg-white border border-[#EDE7DC] text-xs font-bold text-[#15172B] px-3 py-2 rounded-sm focus:outline-none cursor-pointer"
-                >
-                  {classes.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.title} ({c.enrolled_count}/{c.capacity})
-                    </option>
-                  ))}
-                </select>
-              </div>
+          <div className="space-y-8">
+            <div>
+              <h2 className="font-serif text-2xl font-bold text-[#15172B]">
+                Teacher Roster &amp; Dynamic Capacity Engine
+              </h2>
+              <p className="text-xs text-[#555770] mt-1">
+                Select a class from the table below to inspect real-time confirmed student roster and edit dynamic student limits
+              </p>
             </div>
 
+            {/* 1. Classes Selection Table using TableData component */}
+            <div>
+              <TableData<TrialClass>
+                title="All Trial Classes & Capacity Limits"
+                description="Click any class row or Action button to view roster & manage capacity"
+                data={classes}
+                columns={adminClassColumns}
+                actionsColumnSize={200}
+                renderActions={(cls) => {
+                  const isSelected = selectedRosterClassId === cls.id;
+                  return (
+                    <div className="flex items-center gap-2">
+                      <Button
+                        size="sm"
+                        variant={isSelected ? 'default' : 'outline'}
+                        onClick={() => setSelectedRosterClassId(cls.id)}
+                        className={isSelected ? 'bg-[#E73449] text-white hover:bg-[#C72236]' : ''}
+                      >
+                        {isSelected ? 'Viewing Roster' : 'Select Class'}
+                      </Button>
+
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          setEditClassModal(cls);
+                          setEditCapacity(cls.capacity);
+                          setEditTitle(cls.title);
+                          setEditSubject(cls.subject);
+                        }}
+                        className="text-[#E73449] border-[#EDE7DC] hover:border-[#E73449]"
+                      >
+                        <Edit2 className="w-3.5 h-3.5 mr-1" />
+                        Edit Capacity
+                      </Button>
+                    </div>
+                  );
+                }}
+              />
+            </div>
+
+            {/* 2. Confirmed Roster Table using TableData component */}
             {rosterData && (
-              <div className="bg-white border border-[#EDE7DC] rounded-sm p-6 shadow-sm">
-                <div className="flex items-center justify-between pb-4 border-b border-[#EDE7DC] mb-6">
-                  <div>
-                    <h3 className="font-serif text-xl font-bold text-[#15172B]">
-                      {rosterData.class.title}
-                    </h3>
-                    <p className="text-xs text-[#555770]">
-                      Confirmed Enrollment:{' '}
-                      <strong className="text-[#15172B]">
-                        {rosterData.count} / {rosterData.capacity}
-                      </strong>{' '}
-                      Students
-                    </p>
-                  </div>
-
-                  <button
-                    onClick={() => {
-                      setEditClassModal(rosterData.class);
-                      setEditCapacity(rosterData.class.capacity);
-                      setEditTitle(rosterData.class.title);
-                      setEditSubject(rosterData.class.subject);
-                    }}
-                    className="px-4 py-2 bg-[#E73449] hover:bg-[#C72236] text-white rounded-sm text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors shadow-[0_6px_0_-2px_rgba(231,52,73,0.35)]"
-                  >
-                    <Edit2 className="w-3.5 h-3.5" />
-                    Edit Class Capacity Limit
-                  </button>
-                </div>
-
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs text-[#15172B]">
-                    <thead className="bg-[#FFF6E5] text-[#15172B] uppercase tracking-wider font-bold">
-                      <tr>
-                        <th className="px-4 py-3">#</th>
-                        <th className="px-4 py-3">Student Name</th>
-                        <th className="px-4 py-3">Age</th>
-                        <th className="px-4 py-3">Parent Name</th>
-                        <th className="px-4 py-3">Parent Email / Phone</th>
-                        <th className="px-4 py-3">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[#EDE7DC]">
-                      {rosterData.roster.length === 0 ? (
-                        <tr>
-                          <td
-                            colSpan={6}
-                            className="px-4 py-6 text-center text-[#555770]"
-                          >
-                            No confirmed students in this trial class roster
-                            yet.
-                          </td>
-                        </tr>
-                      ) : (
-                        rosterData.roster.map((item, idx) => (
-                          <tr key={item.id} className="hover:bg-[#FFF6E5]/50">
-                            <td className="px-4 py-3 text-[#555770] font-mono">
-                              {idx + 1}
-                            </td>
-                            <td className="px-4 py-3 font-bold text-[#15172B]">
-                              {item.student?.name}
-                            </td>
-                            <td className="px-4 py-3">
-                              {item.student?.age} y.o
-                            </td>
-                            <td className="px-4 py-3 text-[#E73449] font-semibold">
-                              {item.student?.parent?.name}
-                            </td>
-                            <td className="px-4 py-3 text-[#3F4159]">
-                              {item.student?.parent?.email} <br />
-                              <span className="text-[11px] text-[#555770]">
-                                {item.student?.parent?.phone}
-                              </span>
-                            </td>
-                            <td className="px-4 py-3">
-                              <span className="px-2 py-0.5 bg-[#83C341] text-white font-bold rounded-sm text-[10px]">
-                                CONFIRMED
-                              </span>
-                            </td>
-                          </tr>
-                        ))
-                      )}
-                    </tbody>
-                  </table>
-                </div>
+              <div>
+                <TableData<RosterItem>
+                  title={`Confirmed Roster: ${rosterData.class.title}`}
+                  description={`Confirmed Enrollment: ${rosterData.count} / ${rosterData.capacity} Students`}
+                  data={rosterData.roster}
+                  columns={rosterColumns}
+                  noDataMessage="No confirmed students in this trial class roster yet."
+                />
               </div>
             )}
           </div>
