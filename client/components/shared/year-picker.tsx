@@ -69,7 +69,7 @@ export function YearPicker({
           )}
           {value && allowClear && (
             <div
-              className="ml-auto p-1 hover:bg-gray-100 rounded-full"
+              className="ml-auto p-1 hover:bg-gray-100 rounded-sm"
               onClick={handleClear}
             >
               <svg

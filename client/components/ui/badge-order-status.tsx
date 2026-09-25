@@ -8,7 +8,7 @@ type StatusBadgeProps = {
 
 export const BadgeOrderStatus: React.FC<StatusBadgeProps> = ({ status }) => {
   const baseClass =
-    'text-xs font-semibold px-2 py-1 rounded-full inline-block w-fit';
+    'text-xs font-semibold px-2 py-1 rounded-sm inline-block w-fit';
 
   const statusClassMap: Record<string, string> = {
     PAID: 'bg-green-100 text-green-700',

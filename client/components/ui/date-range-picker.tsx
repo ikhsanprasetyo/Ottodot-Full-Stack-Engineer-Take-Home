@@ -14,7 +14,7 @@ export function DateRangePicker({
   onEndChange
 }: DateRangePickerProps) {
   return (
-    <div className="flex items-center gap-1.5 px-2.5 py-1 bg-white border border-gray-200 rounded-md shadow-sm">
+    <div className="flex items-center gap-1.5 px-2.5 py-1 bg-white border border-gray-200 rounded-sm shadow-sm">
       <div className="flex flex-col items-start">
         <span className="text-[9px] font-semibold text-gray-400 uppercase tracking-wide leading-none mb-0.5">
           From

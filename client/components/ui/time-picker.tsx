@@ -195,7 +195,7 @@ export function TimePicker({
               <Button
                 type="button"
                 variant="ghost"
-                className="text-xs h-8 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 font-black tracking-widest uppercase rounded-full px-6 w-full"
+                className="text-xs h-8 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 font-black tracking-widest uppercase rounded-sm px-6 w-full"
                 onClick={() => setIsOpen(false)}
               >
                 Tutup

@@ -26,7 +26,7 @@ const ImageCarousel: React.FC<{ images: string[] }> = ({ images }) => {
               type="button"
               onClick={onClickHandler}
               title={label}
-              className="absolute top-1/2 left-4 z-20 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full shadow-md transition"
+              className="absolute top-1/2 left-4 z-20 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-sm shadow-md transition"
             >
               <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
             </button>
@@ -38,7 +38,7 @@ const ImageCarousel: React.FC<{ images: string[] }> = ({ images }) => {
               type="button"
               onClick={onClickHandler}
               title={label}
-              className="absolute top-1/2 right-4 z-20 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full shadow-md transition"
+              className="absolute top-1/2 right-4 z-20 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-sm shadow-md transition"
             >
               <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />
             </button>

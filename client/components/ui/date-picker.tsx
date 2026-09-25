@@ -139,7 +139,7 @@ export function DatePicker({
                   variant="ghost"
                   size="icon"
                   onClick={handlePrevYear}
-                  className="h-7 w-7 text-gray-300 hover:text-white hover:bg-slate-800 rounded-full"
+                  className="h-7 w-7 text-gray-300 hover:text-white hover:bg-slate-800 rounded-sm"
                 >
                   <ChevronLeft className="h-3 w-3" />
                   <ChevronLeft className="h-3 w-3 -ml-2" />
@@ -148,7 +148,7 @@ export function DatePicker({
                   variant="ghost"
                   size="icon"
                   onClick={handlePrevMonth}
-                  className="h-7 w-7 text-gray-300 hover:text-white hover:bg-slate-800 rounded-full"
+                  className="h-7 w-7 text-gray-300 hover:text-white hover:bg-slate-800 rounded-sm"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
@@ -163,7 +163,7 @@ export function DatePicker({
                   variant="ghost"
                   size="icon"
                   onClick={handleNextMonth}
-                  className="h-7 w-7 text-gray-300 hover:text-white hover:bg-slate-800 rounded-full"
+                  className="h-7 w-7 text-gray-300 hover:text-white hover:bg-slate-800 rounded-sm"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </Button>
@@ -171,7 +171,7 @@ export function DatePicker({
                   variant="ghost"
                   size="icon"
                   onClick={handleNextYear}
-                  className="h-7 w-7 text-gray-300 hover:text-white hover:bg-slate-800 rounded-full"
+                  className="h-7 w-7 text-gray-300 hover:text-white hover:bg-slate-800 rounded-sm"
                 >
                   <ChevronRight className="h-3 w-3" />
                   <ChevronRight className="h-3 w-3 -ml-2" />
@@ -211,7 +211,7 @@ export function DatePicker({
                     disabled={isOutsideBounds}
                     onClick={() => handleSelectDate(d)}
                     className={cn(
-                      'h-9 w-9 rounded-full flex items-center justify-center text-xs font-bold transition-all relative',
+                      'h-9 w-9 rounded-sm flex items-center justify-center text-xs font-bold transition-all relative',
                       isOutsideBounds
                         ? 'text-gray-200 cursor-not-allowed'
                         : !isCurrentMonth
@@ -239,7 +239,7 @@ export function DatePicker({
             <Button
               type="button"
               variant="ghost"
-              className="text-xs h-8 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 font-bold rounded-full px-6 w-full"
+              className="text-xs h-8 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 font-bold rounded-sm px-6 w-full"
               onClick={() => {
                 setViewDate(dayjs());
                 handleSelectDate(dayjs());
