@@ -358,12 +358,12 @@ export default function DashboardPage() {
           const cls = row.original;
           const isSelected = selectedRosterClassId === cls.id;
           return (
-            <div className="flex items-center gap-2">
-              <span className="font-serif font-bold text-[#15172B] text-xs">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="font-serif font-bold text-[#15172B] text-xs sm:text-sm">
                 {cls.title}
               </span>
               {isSelected && (
-                <span className="px-2 py-0.5 bg-[#E73449] text-white text-[10px] font-bold rounded-sm uppercase">
+                <span className="px-2 py-0.5 bg-[#E73449] text-white text-[10px] font-bold rounded-sm uppercase tracking-wider shadow-xs animate-pulse">
                   Active Roster
                 </span>
               )}
@@ -375,7 +375,7 @@ export default function DashboardPage() {
         accessorKey: 'subject',
         header: 'Subject',
         cell: ({ row }) => (
-          <span className="px-2 py-0.5 text-[10px] font-bold uppercase rounded-sm bg-[#FFF6E5] text-[#E73449] border border-[#EDE7DC]">
+          <span className="px-2.5 py-0.5 text-[10px] font-bold uppercase rounded-sm bg-[#FFF6E5] text-[#E73449] border border-[#EDE7DC]">
             {row.original.subject}
           </span>
         ),
@@ -384,7 +384,7 @@ export default function DashboardPage() {
         accessorKey: 'start_time',
         header: 'Start Time',
         cell: ({ row }) => (
-          <span className="text-[#3F4159] text-xs">
+          <span className="text-[#3F4159] text-xs font-medium">
             {new Date(row.original.start_time).toLocaleString()}
           </span>
         ),
@@ -394,12 +394,15 @@ export default function DashboardPage() {
         header: 'Confirmed / Capacity',
         cell: ({ row }) => {
           const isFull = row.original.enrolled_count >= row.original.capacity;
+          const isEmpty = row.original.enrolled_count === 0;
           return (
             <span
-              className={`px-2.5 py-0.5 text-xs font-bold rounded-sm border ${
+              className={`px-2.5 py-0.5 text-xs font-bold rounded-sm border inline-flex items-center gap-1 ${
                 isFull
                   ? 'bg-[#E73449] text-white border-[#C72236]'
-                  : 'bg-[#83C341] text-white border-[#6BA62F]'
+                  : isEmpty
+                    ? 'bg-[#FFF6E5] text-[#555770] border-[#EDE7DC]'
+                    : 'bg-[#83C341] text-white border-[#6BA62F]'
               }`}
             >
               {row.original.enrolled_count} / {row.original.capacity} Students
@@ -984,10 +987,10 @@ export default function DashboardPage() {
             <div>
               <TableData<TrialClass>
                 title="All Trial Classes & Capacity Limits"
-                description="Click any class row or Action button to view roster & manage capacity"
+                description="Select any class row to view active roster & manage capacity limits"
                 data={classes}
                 columns={adminClassColumns}
-                actionsColumnSize={200}
+                actionsColumnSize={210}
                 renderActions={(cls) => {
                   const isSelected = selectedRosterClassId === cls.id;
                   return (
@@ -996,9 +999,14 @@ export default function DashboardPage() {
                         size="sm"
                         variant={isSelected ? 'default' : 'outline'}
                         onClick={() => setSelectedRosterClassId(cls.id)}
-                        className={isSelected ? 'bg-[#E73449] text-white hover:bg-[#C72236]' : ''}
+                        className={
+                          isSelected
+                            ? 'bg-[#E73449] text-white hover:bg-[#C72236] shadow-xs font-bold'
+                            : 'text-[#15172B] border-[#EDE7DC] hover:bg-[#FFF6E5] hover:border-[#E73449] font-medium'
+                        }
                       >
-                        {isSelected ? 'Viewing Roster' : 'Select Class'}
+                        <Users className="w-3.5 h-3.5 mr-1" />
+                        {isSelected ? 'Viewing Roster' : 'Select Roster'}
                       </Button>
 
                       <Button
@@ -1010,7 +1018,7 @@ export default function DashboardPage() {
                           setEditTitle(cls.title);
                           setEditSubject(cls.subject);
                         }}
-                        className="text-[#E73449] border-[#EDE7DC] hover:border-[#E73449]"
+                        className="text-[#E73449] border-[#EDE7DC] hover:bg-[#FFF6E5] hover:border-[#E73449] font-medium"
                       >
                         <Edit2 className="w-3.5 h-3.5 mr-1" />
                         Edit Capacity
@@ -1025,11 +1033,12 @@ export default function DashboardPage() {
             {rosterData && (
               <div>
                 <TableData<RosterItem>
-                  title={`Confirmed Roster: ${rosterData.class.title}`}
-                  description={`Confirmed Enrollment: ${rosterData.count} / ${rosterData.capacity} Students`}
+                  title={`Confirmed Student Roster: ${rosterData.class.title}`}
+                  description={`Live Enrolled Students: ${rosterData.count} / ${rosterData.capacity} Max Capacity`}
                   data={rosterData.roster}
                   columns={rosterColumns}
-                  noDataMessage="No confirmed students in this trial class roster yet."
+                  noDataTitle="Roster Currently Empty"
+                  noDataMessage="No students have completed trial class booking and payment for this session yet."
                 />
               </div>
             )}

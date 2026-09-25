@@ -26,7 +26,8 @@ import {
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
-  Loader2
+  Loader2,
+  FolderOpen
 } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ModalEdit } from '@/components/ui/modal-edit';
@@ -88,6 +89,7 @@ export type TableDataProps<TData> = {
     helpers: { setIsSaving: (v: boolean) => void; closeModal: () => void }
   ) => void;
   isLoading?: boolean;
+  noDataTitle?: string;
   noDataMessage?: string;
   limit?: number;
   setLimit?: (value: number) => void;
@@ -102,6 +104,7 @@ export type TableDataProps<TData> = {
   tableContainerClassName?: string;
   footerRow?: React.ReactNode;
   actionsColumnSize?: number;
+  requireAuthorization?: boolean;
 };
 
 // Custom comparison: set to return false to guarantee row re-renders on any data updates
@@ -136,7 +139,7 @@ const TableDataRow = memo((props: { row: any; _columnsKey: string }) => {
   return (
     <TableRow
       key={row.id}
-      className="hover:bg-sky-200 transition-colors duration-150"
+      className="hover:bg-[#FFF6E5]/60 border-b border-[#EDE7DC]/60 transition-colors duration-150"
     >
       {row.getVisibleCells().map((cell: any) => {
         const colDef = cell.column.columnDef as ExtendedColumnDef<any>;
@@ -159,10 +162,10 @@ const TableDataRow = memo((props: { row: any; _columnsKey: string }) => {
                   : {})
             }}
             className={cn(
-              'px-2 text-xs text-gray-800 align-top',
+              'px-3 py-3.5 text-xs text-[#15172B] align-middle',
               cellAlignClass[colDef.align || 'left'],
               colDef.sticky === 'left' || colDef.sticky === 'right'
-                ? 'sticky z-20 bg-opacity-100 bg-gray-50'
+                ? 'sticky z-20 bg-opacity-100 bg-white'
                 : '',
               colDef.sticky === 'left' ? 'left-0' : '',
               colDef.sticky === 'right' ? 'right-0' : '',
@@ -605,21 +608,31 @@ export function TableData<TData>(props: TableDataProps<TData>) {
 
       <Card
         ref={tableTopRef}
-        className="flex flex-col w-[100%] shadow-sm border border-gray-100 rounded-sm hover:shadow-md"
+        className="flex flex-col w-[100%] shadow-sm border border-[#EDE7DC] rounded-sm hover:shadow-md transition-shadow bg-white overflow-hidden"
       >
         <CardContent className="flex-1 rounded-sm border border-transparent shadow-sm p-0">
-          <div className="flex items-center gap-1 p-2 border-b bg-gray-50 justify-between">
-            {description && (
-              <p className="text-sm text-gray-600 leading-relaxed">
-                {`${description} (${locallyFilteredData?.length})`}
-              </p>
-            )}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-[#FFF6E5]/40 border-b border-[#EDE7DC]">
+            <div>
+              {title && (
+                <h3 className="font-serif text-lg font-bold text-[#15172B] tracking-tight flex items-center gap-2">
+                  {title}
+                  {locallyFilteredData && (
+                    <span className="px-2.5 py-0.5 bg-[#E73449] text-white text-[10px] font-bold rounded-sm uppercase tracking-wider shadow-xs">
+                      {locallyFilteredData.length}
+                    </span>
+                  )}
+                </h3>
+              )}
+              {description && (
+                <p className="text-xs text-[#555770] mt-0.5">{description}</p>
+              )}
+            </div>
             {!hideSearchInput && (
               <SearchInput
                 value={searchInput ?? ''}
                 onChange={setSearchInput}
-                placeholder="Search by name..."
-                className="ml-auto"
+                placeholder="Search records..."
+                className="w-full sm:w-64"
               />
             )}
           </div>
@@ -631,9 +644,9 @@ export function TableData<TData>(props: TableDataProps<TData>) {
               containerClassName={tableContainerClassName}
             >
               {/* HEADER */}
-              <TableHeader className="sticky top-0 z-50 bg-slate-900">
+              <TableHeader className="sticky top-0 z-50 bg-[#FFF6E5] border-b border-[#EDE7DC]">
                 {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
+                  <TableRow key={headerGroup.id} className="border-b border-[#EDE7DC] bg-[#FFF6E5]">
                     {headerGroup?.headers?.map((header) => {
                       const colDef = header.column
                         .columnDef as ExtendedColumnDef<TData>;
@@ -654,8 +667,8 @@ export function TableData<TData>(props: TableDataProps<TData>) {
                                 : {})
                           }}
                           className={cn(
-                            'bg-slate-900',
-                            'uppercase text-[11px] font-bold tracking-wide text-white',
+                            'bg-[#FFF6E5] py-3.5 px-3',
+                            'uppercase text-[11px] font-bold tracking-wider text-[#15172B]',
                             headerAlignClass[colDef.align || 'left'],
                             colDef.sticky === 'left' ||
                               colDef.sticky === 'right'
@@ -670,7 +683,7 @@ export function TableData<TData>(props: TableDataProps<TData>) {
                               className={cn(
                                 'flex items-center gap-2 w-full',
                                 canSort &&
-                                  'cursor-pointer select-none hover:text-white transition-colors',
+                                  'cursor-pointer select-none hover:text-[#E73449] transition-colors',
                                 headerAlignClass[colDef.align || 'left']
                               )}
                               onClick={
@@ -685,11 +698,11 @@ export function TableData<TData>(props: TableDataProps<TData>) {
                               {canSort && (
                                 <span className="flex-shrink-0">
                                   {isSorted === 'asc' ? (
-                                    <ArrowUp className="h-3 w-3" />
+                                    <ArrowUp className="h-3 w-3 text-[#E73449]" />
                                   ) : isSorted === 'desc' ? (
-                                    <ArrowDown className="h-3 w-3" />
+                                    <ArrowDown className="h-3 w-3 text-[#E73449]" />
                                   ) : (
-                                    <ArrowUpDown className="h-3 w-3 opacity-50" />
+                                    <ArrowUpDown className="h-3 w-3 opacity-40" />
                                   )}
                                 </span>
                               )}
@@ -720,8 +733,8 @@ export function TableData<TData>(props: TableDataProps<TData>) {
                       className="text-center h-24"
                     >
                       <div className="flex items-center justify-center gap-2 py-4">
-                        <Loader2 className="animate-spin h-5 w-5 text-brand-600" />
-                        <span className="text-xs text-gray-500 font-medium">
+                        <Loader2 className="animate-spin h-5 w-5 text-[#E73449]" />
+                        <span className="text-xs text-[#555770] font-medium">
                           Memuat data...
                         </span>
                       </div>
@@ -740,9 +753,19 @@ export function TableData<TData>(props: TableDataProps<TData>) {
                           ? 1
                           : 0)
                       }
-                      className="text-center h-24 text-gray-500 text-sm"
+                      className="text-center py-12 bg-white"
                     >
-                      {props.noDataMessage ?? 'Tidak ada data'}
+                      <div className="flex flex-col items-center justify-center space-y-3">
+                        <div className="w-12 h-12 rounded-full bg-[#FFF6E5] border border-[#EDE7DC] text-[#E73449] flex items-center justify-center shadow-xs">
+                          <FolderOpen className="w-6 h-6" />
+                        </div>
+                        <div className="font-serif font-bold text-base text-[#15172B]">
+                          {props.noDataTitle ?? 'No Records Found'}
+                        </div>
+                        <p className="text-xs text-[#555770] max-w-sm">
+                          {props.noDataMessage ?? 'There are no confirmed items or entries to display at the moment.'}
+                        </p>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ) : (
