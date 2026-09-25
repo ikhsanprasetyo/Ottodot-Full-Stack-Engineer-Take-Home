@@ -19,7 +19,9 @@ vendor/
 go.work
 
 # Environment
-# .env
+.env
+.env.*
+!.env.example
 
 # IDE
 .idea/
