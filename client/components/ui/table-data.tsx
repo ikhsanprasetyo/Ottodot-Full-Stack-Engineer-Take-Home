@@ -646,7 +646,10 @@ export function TableData<TData>(props: TableDataProps<TData>) {
               {/* HEADER */}
               <TableHeader className="sticky top-0 z-50 bg-[#FFF6E5] border-b border-[#EDE7DC]">
                 {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id} className="border-b border-[#EDE7DC] bg-[#FFF6E5]">
+                  <TableRow
+                    key={headerGroup.id}
+                    className="border-b border-[#EDE7DC] bg-[#FFF6E5]"
+                  >
                     {headerGroup?.headers?.map((header) => {
                       const colDef = header.column
                         .columnDef as ExtendedColumnDef<TData>;
@@ -763,7 +766,8 @@ export function TableData<TData>(props: TableDataProps<TData>) {
                           {props.noDataTitle ?? 'No Records Found'}
                         </div>
                         <p className="text-xs text-[#555770] max-w-sm">
-                          {props.noDataMessage ?? 'There are no confirmed items or entries to display at the moment.'}
+                          {props.noDataMessage ??
+                            'There are no confirmed items or entries to display at the moment.'}
                         </p>
                       </div>
                     </TableCell>

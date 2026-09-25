@@ -38,14 +38,18 @@ export const Logo: React.FC<LogoProps> = ({
       )}
       style={{ height: targetHeight, width: 'auto' }}
     >
-      <img
+      <Image
         src={logoUrl}
         alt="Ottodot Logo"
+        width={targetHeight * 4}
+        height={targetHeight}
         style={{ height: targetHeight, width: 'auto', objectFit: 'contain' }}
         className={cn(
           isCircle ? 'rounded-full' : '',
           'group-hover:scale-105 transition-transform duration-200 h-full w-auto object-contain'
         )}
+        priority
+        unoptimized
       />
     </div>
   );

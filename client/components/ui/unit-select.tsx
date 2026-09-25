@@ -40,7 +40,8 @@ export const UnitSelect: React.FC<UnitSelectProps> = ({
 
   if (form) {
     const selectedValue = form.watch(name);
-    const formError = form.formState.errors[name]?.message as string | undefined;
+    const formError = form.formState.errors[name]?.message as
+      string | undefined;
 
     return (
       <div className={`flex flex-col space-y-2 w-full ${containerClassName}`}>

@@ -102,7 +102,7 @@ export default function DashboardPage() {
       try {
         const stored = localStorage.getItem('ottodot_user');
         if (stored) loggedInUser = JSON.parse(stored);
-      } catch (e) {}
+      } catch {}
       const demoName = localStorage.getItem('ottodot_demo_name');
 
       setSelectedParent((prevParent) => {
