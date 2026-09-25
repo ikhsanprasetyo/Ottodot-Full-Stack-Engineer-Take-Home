@@ -234,3 +234,20 @@ All requirements, edge case scenarios, backend architecture, data models, concur
   - [`PRD.md`](file:///c:/Project/Web/Ottodot%20Full-Stack%20Engineer%20Take-Home/PRD.md): Product specification approval document.
   - [`architecture.md`](file:///c:/Project/Web/Ottodot%20Full-Stack%20Engineer%20Take-Home/architecture.md): Mermaid architecture diagrams, PostgreSQL SQL DDL, and ERD.
 
+---
+
+## 🎤 5. Technical Interview Talking Points & Executive Summary
+
+### 🇺🇸 English Version (1-Minute Interview Elevator Pitch)
+> **"The Ottodot Trial Booking System is a high-concurrency, real-time trial class booking platform engineered to solve the 'Last-Seat Overbooking' race condition. Built using a Go (Gin) REST Backend, PostgreSQL relational database, Next.js (App Router) SPA Frontend, and WebSockets, the system guarantees 100% data integrity, zero double-bookings, and dynamic capacity management with zero downtime deployment."**
+
+* **Key Strengths to Highlight**:
+  1. **Pessimistic DB Row Locking (`SELECT ... FOR UPDATE`)**: Eliminates the Last-Seat race condition at the PostgreSQL database transaction layer across multi-instance API deployments.
+  2. **Partial Unique Index**: Enforces `(student_id, trial_class_id) WHERE status = 'confirmed'` to prevent duplicate child registrations.
+  3. **Go WebSockets Hub**: Real-time event broadcasting streaming live seat updates to all connected parents and teachers without page refreshes.
+  4. **Zero-Downtime Infrastructure**: Next.js Static Export SPA served behind an Nginx active-standby load balancer (`127.0.0.1:9050` & `9051`) with Supervisor process control.
+
+### 🇮🇩 Bahasa Indonesia Version (Presentasi Ringkas Wawancara)
+> **"Sistem Booking Kelas Percobaan Ottodot adalah platform booking real-time dengan skalabilitas dan konkurensi tinggi yang dirancang khusus untuk menyelesaikan masalah 'Overbooking pada Kursi Terakhir' (Race Condition). Dibangun menggunakan backend Go (Gin), database relational PostgreSQL, frontend Next.js (App Router) SPA, dan WebSockets, sistem ini menjamin 100% integritas data, tanpa overbooking, dan memiliki fitur manajemen kapasitas dinamis tanpa downtime."**
+
+
