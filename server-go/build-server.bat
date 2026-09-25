@@ -3,7 +3,7 @@ setlocal
 
 :: Settings
 set BIN_DIR=bin
-set APP_NAME=rtu-server
+set APP_NAME=ottodot-server
 set MAIN_FILE=cmd/api/main.go
 set LDFLAGS=-s -w
 

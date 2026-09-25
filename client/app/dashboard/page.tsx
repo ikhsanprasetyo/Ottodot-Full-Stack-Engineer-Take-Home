@@ -98,18 +98,55 @@ export default function DashboardPage() {
       setClasses(classList);
       setParents(parentList);
 
+      let loggedInUser: any = null;
+      try {
+        const stored = localStorage.getItem('ottodot_user');
+        if (stored) loggedInUser = JSON.parse(stored);
+      } catch (e) {}
+      const demoName = localStorage.getItem('ottodot_demo_name');
+
       setSelectedParent((prevParent) => {
         if (prevParent) {
           const updated = parentList.find((p) => p.id === prevParent.id);
-          return updated || parentList[0] || null;
+          if (updated) return updated;
+        }
+        if (loggedInUser) {
+          const matched = parentList.find(
+            (p) =>
+              p.email === loggedInUser.email ||
+              p.name.toLowerCase() === loggedInUser.name?.toLowerCase() ||
+              p.id === loggedInUser.id
+          );
+          if (matched) return matched;
+        }
+        if (demoName) {
+          const matchedDemo = parentList.find(
+            (p) => p.name.toLowerCase() === demoName.toLowerCase()
+          );
+          if (matchedDemo) return matchedDemo;
         }
         return parentList[0] || null;
       });
 
       setSelectedStudent((prevStudent) => {
         if (prevStudent) return prevStudent;
-        if (parentList[0] && parentList[0].students.length > 0) {
-          return parentList[0].students[0];
+        let activeParent = parentList[0];
+        if (loggedInUser) {
+          const matched = parentList.find(
+            (p) =>
+              p.email === loggedInUser.email ||
+              p.name.toLowerCase() === loggedInUser.name?.toLowerCase() ||
+              p.id === loggedInUser.id
+          );
+          if (matched) activeParent = matched;
+        } else if (demoName) {
+          const matchedDemo = parentList.find(
+            (p) => p.name.toLowerCase() === demoName.toLowerCase()
+          );
+          if (matchedDemo) activeParent = matchedDemo;
+        }
+        if (activeParent && activeParent.students.length > 0) {
+          return activeParent.students[0];
         }
         return null;
       });
@@ -162,6 +199,7 @@ export default function DashboardPage() {
   // Handle Parent Switch
   const handleParentSelect = (parent: Parent) => {
     setSelectedParent(parent);
+    localStorage.setItem('ottodot_demo_name', parent.name);
     if (parent.students.length > 0) {
       setSelectedStudent(parent.students[0]);
     } else {

@@ -21,13 +21,20 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleLogin = async (e?: React.FormEvent) => {
+  const handleLogin = async (
+    e?: React.FormEvent,
+    overrideEmail?: string,
+    overridePassword?: string
+  ) => {
     if (e) e.preventDefault();
     setLoading(true);
     setError(null);
 
+    const targetEmail = overrideEmail || email;
+    const targetPassword = overridePassword || password;
+
     try {
-      const res = await ottodotApi.login(email, password);
+      const res = await ottodotApi.login(targetEmail, targetPassword);
       if (res.success && res.data.token) {
         localStorage.setItem('ottodot_token', res.data.token);
         localStorage.setItem('ottodot_user', JSON.stringify(res.data.user));
@@ -49,9 +56,7 @@ export default function LoginPage() {
     setPassword('password123');
     localStorage.setItem('ottodot_demo_role', role);
     localStorage.setItem('ottodot_demo_name', name);
-    setTimeout(() => {
-      handleLogin();
-    }, 100);
+    handleLogin(undefined, quickEmail, 'password123');
   };
 
   return (
